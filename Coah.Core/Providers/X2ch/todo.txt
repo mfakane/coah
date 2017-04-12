@@ -1,0 +1,2 @@
+﻿TODO: 板移転のハンドリング
+例外飛ばすなりしてFeedPage側でFeedやFeedSummaryを新しいものに入れ替えてもらうのがよさそう

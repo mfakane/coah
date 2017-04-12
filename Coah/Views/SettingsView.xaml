@@ -1,0 +1,324 @@
+﻿<Window x:Class="Linearstar.Coah.Views.SettingsView"
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+		xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:v="clr-namespace:Linearstar.Coah.Views"
+		xmlns:vm="clr-namespace:Linearstar.Coah.ViewModels"
+		mc:Ignorable="d"
+		Style="{StaticResource MetroWindowStyle}"
+		WindowStartupLocation="CenterOwner"
+		Height="480"
+		Width="640"
+		d:DataContext="{d:DesignInstance vm:SettingsViewModel}">
+	<i:Interaction.Behaviors>
+		<v:MetroWindowBehavior />
+	</i:Interaction.Behaviors>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="25" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+		<TextBlock VerticalAlignment="Center"
+				   Margin="16,8"
+				   Text="設定"
+				   Grid.RowSpan="2"
+				   Foreground="{StaticResource MetroAccentBrush}" />
+		<TabControl Grid.Row="2"
+					Style="{StaticResource MetroVerticalTabControlStyle}">
+			<TabControl.Resources>
+				<Style TargetType="TextBlock"
+					   BasedOn="{StaticResource {x:Type TextBlock}}">
+					<Setter Property="Margin"
+							Value="0,0,0,4" />
+				</Style>
+				<Style TargetType="TextBox"
+					   BasedOn="{StaticResource {x:Type TextBox}}">
+					<Setter Property="Margin"
+							Value="0,0,0,8" />
+					<Setter Property="Width"
+							Value="192" />
+					<Setter Property="HorizontalAlignment"
+							Value="Left" />
+				</Style>
+				<Style TargetType="PasswordBox"
+					   BasedOn="{StaticResource {x:Type PasswordBox}}">
+					<Setter Property="Margin"
+							Value="0,0,0,8" />
+					<Setter Property="Width"
+							Value="192" />
+					<Setter Property="HorizontalAlignment"
+							Value="Left" />
+				</Style>
+				<Style TargetType="ComboBox"
+					   BasedOn="{StaticResource {x:Type ComboBox}}">
+					<Setter Property="Margin"
+							Value="0,0,0,8" />
+					<Setter Property="Width"
+							Value="192" />
+					<Setter Property="HorizontalAlignment"
+							Value="Left" />
+				</Style>
+				<Style TargetType="CheckBox"
+					   BasedOn="{StaticResource {x:Type CheckBox}}">
+					<Setter Property="Margin"
+							Value="0,0,0,8" />
+					<Setter Property="HorizontalAlignment"
+							Value="Left" />
+				</Style>
+				<Style TargetType="Button"
+					   BasedOn="{StaticResource {x:Type Button}}">
+					<Setter Property="Margin"
+							Value="0,0,0,8" />
+					<Setter Property="HorizontalAlignment"
+							Value="Left" />
+				</Style>
+				<Style TargetType="GroupBox">
+					<Setter Property="Margin"
+							Value="0,0,0,8" />
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="GroupBox">
+								<StackPanel>
+									<ContentPresenter ContentSource="Header"
+													  TextBlock.FontSize="16"
+													  Margin="0,0,0,8" />
+									<ContentPresenter ContentSource="Content" />
+								</StackPanel>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</TabControl.Resources>
+			<TabItem Header="表示">
+				<DockPanel>
+					<TextBlock Text="表示"
+							   Style="{StaticResource MetroMainInstructionStyle}"
+							   Padding="16,16,16,8"
+							   DockPanel.Dock="Top" />
+					<ScrollViewer VerticalScrollBarVisibility="Auto"
+								  Padding="16,8">
+						<StackPanel>
+							<GroupBox Header="日付の形式">
+								<StackPanel>
+									<TextBlock Text="日付" />
+									<StackPanel Orientation="Horizontal">
+										<TextBox Text="yyyy/MM/dd HH:mm" />
+										<TextBlock Text="yyyy/MM/dd HH:mm"
+												   Margin="8,3,0,0" />
+									</StackPanel>
+									<TextBlock Text="最終更新" />
+									<StackPanel Orientation="Horizontal">
+										<TextBox Text="MM/dd HH:mm" />
+										<TextBlock Text="MM/dd HH:mm"
+												   Margin="8,3,0,0" />
+									</StackPanel>
+									<TextBlock Text="最終参照" />
+									<StackPanel Orientation="Horizontal">
+										<TextBox Text="MM/dd HH:mm" />
+										<TextBlock Text="MM/dd HH:mm"
+												   Margin="8,3,0,0" />
+									</StackPanel>
+								</StackPanel>
+							</GroupBox>
+							<GroupBox Header="場所">
+								<StackPanel>
+									<TextBlock Text="分割単位" />
+									<ComboBox>
+										<ComboBoxItem IsSelected="True">20</ComboBoxItem>
+									</ComboBox>
+									<TextBlock Text="順番" />
+									<ComboBox>
+										<ComboBoxItem>昇順</ComboBoxItem>
+										<ComboBoxItem IsSelected="True">降順</ComboBoxItem>
+									</ComboBox>
+								</StackPanel>
+							</GroupBox>
+							<GroupBox Header="一覧">
+								<StackPanel>
+									<CheckBox Content="偶数・奇数行を色分ける" />
+								</StackPanel>
+							</GroupBox>
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</TabItem>
+			<TabItem Header="動作">
+				<DockPanel>
+					<TextBlock Text="動作"
+							   Style="{StaticResource MetroMainInstructionStyle}"
+							   Padding="16,16,16,8"
+							   DockPanel.Dock="Top" />
+					<ScrollViewer VerticalScrollBarVisibility="Auto"
+								  Padding="16,8">
+						<StackPanel>
+							<GroupBox Header="場所">
+								<StackPanel>
+									<CheckBox Content="作品集をシングルクリックで開く" />
+									<CheckBox Content="現在開いている作品集を一覧で選択する" />
+								</StackPanel>
+							</GroupBox>
+							<GroupBox Header="作品集">
+								<StackPanel>
+									<CheckBox Content="作品をシングルクリックで開く" />
+									<CheckBox Content="インクリメンタル検索を使用する" />
+								</StackPanel>
+							</GroupBox>
+							<GroupBox Header="作品">
+								<StackPanel>
+									<TextBlock Text="作者名ボタンの動作" />
+									<ComboBox>
+										<ComboBoxItem IsSelected="True">SS さがすよ！ から検索</ComboBoxItem>
+									</ComboBox>
+									<TextBlock Text="タグボタンの動作" />
+									<ComboBox>
+										<ComboBoxItem IsSelected="True">現在の作品集から検索</ComboBoxItem>
+									</ComboBox>
+								</StackPanel>
+							</GroupBox>
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</TabItem>
+			<TabItem Header="プロキシ">
+				<DockPanel>
+					<TextBlock Text="プロキシ"
+							   Style="{StaticResource MetroMainInstructionStyle}"
+							   Padding="16,16,16,8"
+							   DockPanel.Dock="Top" />
+					<ScrollViewer VerticalScrollBarVisibility="Auto"
+								  Padding="16,8">
+						<StackPanel>
+							<GroupBox Header="読み込み">
+								<StackPanel>
+									<TextBlock Text="ホストとポート" />
+									<TextBox />
+									<Grid HorizontalAlignment="Left"
+										  Margin="0,0,0,8">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto" />
+											<ColumnDefinition Width="8" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="Auto" />
+											<RowDefinition Height="Auto" />
+										</Grid.RowDefinitions>
+										<TextBlock Text="ユーザ名" />
+										<TextBox Grid.Row="1"
+												 Width="92" />
+										<TextBlock Text="パスワード"
+												   Grid.Column="2" />
+										<PasswordBox Grid.Row="1"
+													 Grid.Column="2"
+													 Width="92" />
+									</Grid>
+									<CheckBox Content="システム設定を使用する" />
+								</StackPanel>
+							</GroupBox>
+							<GroupBox Header="書き込み">
+								<StackPanel>
+									<TextBlock Text="ホストとポート" />
+									<TextBox />
+									<Grid HorizontalAlignment="Left"
+										  Margin="0,0,0,8">
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto" />
+											<ColumnDefinition Width="8" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<Grid.RowDefinitions>
+											<RowDefinition Height="Auto" />
+											<RowDefinition Height="Auto" />
+										</Grid.RowDefinitions>
+										<TextBlock Text="ユーザ名" />
+										<TextBox Grid.Row="1"
+												 Width="92" />
+										<TextBlock Text="パスワード"
+												   Grid.Column="2" />
+										<PasswordBox Grid.Row="1"
+													 Grid.Column="2"
+													 Width="92" />
+									</Grid>
+									<CheckBox Content="システム設定を使用する" />
+								</StackPanel>
+							</GroupBox>
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</TabItem>
+			<TabItem Header="Coah について">
+				<DockPanel>
+					<TextBlock Text="Coah について"
+							   Style="{StaticResource MetroMainInstructionStyle}"
+							   Padding="16,16,16,8"
+							   DockPanel.Dock="Top" />
+					<TabControl Style="{StaticResource MetroSubTabControlStyle}">
+						<TabItem Header="バージョン情報">
+							<GroupBox Header="Coah 3"
+									  Margin="16,0">
+								<StackPanel>
+									<TextBlock Text="Version 0.0.0.0" />
+									<TextBlock Text="Copyright © 2015 mfakane"
+											   Margin="0,0,0,8" />
+								</StackPanel>
+							</GroupBox>
+
+						</TabItem>
+						<TabItem Header="自動更新">
+							<StackPanel Margin="16,0">
+								<TextBlock Text="利用可能な更新はありません。" />
+								<Button Content="更新を今すぐチェックする"
+										Margin="0,0,0,16" />
+								<TextBlock Text="更新をチェックする頻度" />
+								<ComboBox>
+									<ComboBoxItem IsSelected="True">1 週間</ComboBoxItem>
+								</ComboBox>
+								<TextBlock Text="更新がない場合、チェック頻度は自動的に延長されます。" />
+								<TextBlock Text="現在のチェック頻度: 1 週間"
+										   Margin="0,0,0,16" />
+							</StackPanel>
+						</TabItem>
+						<TabItem Header="ライセンス">
+							<TabControl>
+								<TabItem Header="foo" />
+								<TabItem Header="bar" />
+							</TabControl>
+						</TabItem>
+					</TabControl>
+				</DockPanel>
+			</TabItem>
+		</TabControl>
+		<Border Grid.Row="3">
+			<StackPanel Orientation="Horizontal"
+						HorizontalAlignment="Right"
+						Margin="8">
+				<Button Content="OK"
+						Margin="0,0,8,0"
+						IsDefault="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="Click">
+							<ei:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+													 PropertyName="DialogResult"
+													 Value="True" />
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</Button>
+				<Button Content="キャンセル"
+						IsCancel="True">
+					<i:Interaction.Triggers>
+						<i:EventTrigger EventName="Click">
+							<ei:ChangePropertyAction TargetObject="{Binding RelativeSource={RelativeSource AncestorType=Window}}"
+													 PropertyName="DialogResult"
+													 Value="False" />
+						</i:EventTrigger>
+					</i:Interaction.Triggers>
+				</Button>
+			</StackPanel>
+		</Border>
+	</Grid>
+</Window>

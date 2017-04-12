@@ -1,0 +1,338 @@
+﻿<UserControl x:Name="Container"
+			 x:Class="Linearstar.Coah.Views.ArticlePageView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
+			 xmlns:cal="http://www.caliburnproject.org"
+			 xmlns:vm="clr-namespace:Linearstar.Coah.ViewModels"
+			 xmlns:v="clr-namespace:Linearstar.Coah.Views"
+			 mc:Ignorable="d"
+			 d:DesignHeight="480"
+			 d:DesignWidth="640"
+			 d:DataContext="{d:DesignInstance vm:ArticlePageViewModel}"
+			 Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+			 IsTabStop="False"
+			 Loaded="UserControl_Loaded"
+			 Unloaded="UserControl_Unloaded">
+	<UserControl.Resources>
+		<StackPanel Orientation="Horizontal"
+					x:Key="ArticleStatusBarItem">
+			<TextBlock Text="{Binding DisplayRangeString}"
+					   Margin="4,0" />
+		</StackPanel>
+	</UserControl.Resources>
+	<Grid>
+		<VisualStateManager.VisualStateGroups>
+			<VisualStateGroup>
+				<VisualState Name="IsBrowserLoaded" />
+				<VisualState Name="IsBrowserLoading">
+					<Storyboard>
+						<BooleanAnimationUsingKeyFrames Storyboard.TargetName="ProgressBar"
+														Storyboard.TargetProperty="IsIndeterminate">
+							<DiscreteBooleanKeyFrame KeyTime="0"
+													 Value="True" />
+						</BooleanAnimationUsingKeyFrames>
+						<ObjectAnimationUsingKeyFrames Storyboard.TargetName="ProgressBar"
+													   Storyboard.TargetProperty="Visibility">
+							<DiscreteObjectKeyFrame KeyTime="0"
+													Value="{x:Static Visibility.Visible}" />
+						</ObjectAnimationUsingKeyFrames>
+					</Storyboard>
+				</VisualState>
+			</VisualStateGroup>
+		</VisualStateManager.VisualStateGroups>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<Menu Visibility="Collapsed">
+			<MenuItem Name="ArticleMenuItem"
+					  Header="作品(_P)">
+				<MenuItem Name="RefreshView"
+						  Header="最新の情報に更新(_R)"
+						  cal:Message.Attach="[Key F5] = [RefreshView]">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Refresh.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="すべて最新の情報に更新(_A)" />
+				<MenuItem Name="Stop"
+						  Header="中止(_S)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Stop.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="自動更新(_U)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Compass.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="上までスクロール(_U)"
+						  cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+						  cal:Message.Attach="ScrollToTop; [Key F11] = [ScrollToTop]">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Up.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="下までスクロール(_W)"
+						  cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+						  cal:Message.Attach="ScrollToBottom; [Key F12] = [ScrollToBottom]">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Down.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="表示範囲(_I)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/DisplayRange.png" />
+					</MenuItem.Icon>
+					<MenuItem Name="SetDisplayRangeTop50"
+							  Header="最初の 50 項目(_T)" />
+					<MenuItem Name="SetDisplayRangeLatest50"
+							  Header="最新の 50 項目(_L)" />
+					<Separator />
+					<MenuItem Name="SetDisplayRangeAll"
+							  Header="すべての項目(_A)" />
+				</MenuItem>
+				<MenuItem Header="ページ内検索(_F)..."
+						  IsChecked="{Binding Visibility, ElementName=SearchToolBar, Converter={StaticResource VisibilityToBooleanConverter}, Mode=OneWay}"
+						  cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+						  cal:Message.Attach="ToggleSearchBar; [Key Ctrl+F] = [ToggleSearchBar]">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Search.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<MenuItem Header="類似タイトルを検索(_S)"
+						  cal:Action.TargetWithoutContext="{Binding ArticleSummary}"
+						  cal:Message.Attach="ShowSimiliarArticles" />
+				<Separator />
+				<MenuItem Header="コメントを書き込む(_W)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Write.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator />
+				<MenuItem Name="ShowFeed"
+						  Header="作品集を開く(_F)" />
+				<MenuItem Header="ブラウザで開く(_B)"
+						  cal:Action.TargetWithoutContext="{Binding ArticleSummary}"
+						  cal:Message.Attach="OpenInBrowser">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/WebBrowser.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="クリップボードへコピー(_C)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Clipboard.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="(なし)"
+							  IsEnabled="False" />
+				</MenuItem>
+				<MenuItem Header="ブックマーク(_K)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Bookmark.png" />
+					</MenuItem.Icon>
+					<MenuItem Header="(なし)"
+							  IsEnabled="False" />
+				</MenuItem>
+				<Separator />
+				<MenuItem Name="RefreshHard"
+						  Header="ログを再取得(_G)"
+						  cal:Message.Attach="[Key Ctrl+G] = [RefreshHard]" />
+				<MenuItem Name="DeleteCacheAndClose"
+						  Header="ログを削除して閉じる(_D)">
+					<MenuItem.Icon>
+						<Image Source="/Resources/Icons/Delete.png" />
+					</MenuItem.Icon>
+				</MenuItem>
+				<Separator />
+				<MenuItem Header="閉じる(_X)"
+						  cal:Message.Attach="Close; [Key Ctrl+W] = [Close]" />
+			</MenuItem>
+		</Menu>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition />
+				<ColumnDefinition Width="Auto" />
+			</Grid.ColumnDefinitions>
+			<ToolBar Padding="16,8,0,4">
+				<Button Style="{StaticResource HyperlinkButtonStyle}"
+						Margin="0,0,4,0"
+						cal:Message.Attach="ShowFeed">
+					<StackPanel Orientation="Horizontal">
+						<Border Visibility="{Binding Model.ArticleSummary.FeedSummary.Location.IsSingleFeedLocation, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+							<TextBlock Text="{Binding Model.ArticleSummary.FeedSummary.Location.Name}"
+									   Margin="0,0,4,0"
+									   Opacity="0.5" />
+						</Border>
+						<TextBlock Text="{Binding Model.ArticleSummary.FeedSummary.Name}"
+								   Opacity="0.5" />
+					</StackPanel>
+				</Button>
+				<Button Content="{Binding Model.ArticleSummary.Title}"
+						Style="{StaticResource HyperlinkButtonStyle}"
+						Margin="0,0,4,0"
+						cal:Action.TargetWithoutContext="{Binding ArticleSummary}"
+						cal:Message.Attach="OpenInBrowser" />
+				<Button Style="{StaticResource HyperlinkButtonStyle}">
+					<TextBlock Text="{Binding Model.ArticleSummary.CommentCount, StringFormat=(0)}" />
+				</Button>
+			</ToolBar>
+			<ToolBar Grid.Column="1"
+					 Padding="0,8,8,4">
+				<Button ToolTip="上までスクロール"
+						cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+						cal:Message.Attach="ScrollToTop">
+					<Image Source="/Resources/Icons/Up.png" />
+				</Button>
+				<Button ToolTip="下までスクロール"
+						cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+						cal:Message.Attach="ScrollToBottom">
+					<Image Source="/Resources/Icons/Down.png" />
+				</Button>
+				<v:DropDownMenuButton ToolTip="表示範囲"
+									  Style="{StaticResource ToolBarDropDownMenuButtonStyle}">
+					<v:DropDownMenuButton.DropDownMenu>
+						<ContextMenu>
+							<MenuItem Header="最初の 50 項目"
+									  cal:Message.Attach="SetDisplayRangeTop50" />
+							<MenuItem Header="最新の 50 項目"
+									  cal:Message.Attach="SetDisplayRangeLatest50" />
+							<Separator />
+							<MenuItem Header="すべての項目"
+									  cal:Message.Attach="SetDisplayRangeAll" />
+						</ContextMenu>
+					</v:DropDownMenuButton.DropDownMenu>
+					<Image Source="/Resources/Icons/DisplayRange.png" />
+				</v:DropDownMenuButton>
+				<ToggleButton ToolTip="ページ内検索"
+							  IsChecked="{Binding IsVisible, ElementName=SearchToolBar, Mode=OneWay}"
+							  cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+							  cal:Message.Attach="ToggleSearchBar">
+					<Image Source="/Resources/Icons/Search.png" />
+				</ToggleButton>
+				<Separator />
+				<Button ToolTip="書き込む">
+					<Image Source="/Resources/Icons/Write.png" />
+				</Button>
+				<Separator />
+				<v:SplitMenuButton x:Name="RefreshOrStop"
+								   ToolTip="最新の情報に更新"
+								   Style="{StaticResource ToolBarSplitMenuButtonStyle}">
+					<v:SplitMenuButton.DropDownMenu>
+						<ContextMenu>
+							<MenuItem Header="最新の情報に更新"
+									  cal:Message.Attach="RefreshView">
+								<MenuItem.Icon>
+									<Image Source="/Resources/Icons/Refresh.png" />
+								</MenuItem.Icon>
+							</MenuItem>
+							<MenuItem Header="ログを再取得"
+									  cal:Message.Attach="RefreshHard" />
+						</ContextMenu>
+					</v:SplitMenuButton.DropDownMenu>
+					<Grid>
+						<Image Source="/Resources/Icons/Refresh.png"
+							   Visibility="{Binding ProgressState.IsBusy, Converter={StaticResource InverseBooleanToVisibilityConverter}}" />
+						<Image Source="/Resources/Icons/Stop.png"
+							   Visibility="{Binding ProgressState.IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}" />
+					</Grid>
+				</v:SplitMenuButton>
+				<v:SplitMenuButton ToolTip="自動更新"
+								   Style="{StaticResource ToolBarSplitMenuButtonStyle}">
+					<v:SplitMenuButton.DropDownMenu>
+						<ContextMenu />
+					</v:SplitMenuButton.DropDownMenu>
+					<Image Source="/Resources/Icons/Compass.png" />
+				</v:SplitMenuButton>
+				<Separator />
+				<v:DropDownMenuButton ToolTip="クリップボードへコピー"
+									  Style="{DynamicResource ToolBarDropDownMenuButtonStyle}">
+					<v:DropDownMenuButton.DropDownMenu>
+						<ContextMenu>
+							<MenuItem Header="foo" />
+						</ContextMenu>
+					</v:DropDownMenuButton.DropDownMenu>
+					<Image Source="/Resources/Icons/Clipboard.png" />
+				</v:DropDownMenuButton>
+				<v:DropDownMenuButton ToolTip="ブックマーク"
+									  Style="{StaticResource ToolBarDropDownMenuButtonStyle}">
+					<v:DropDownMenuButton.DropDownMenu>
+						<ContextMenu>
+							<MenuItem Header="ブックマークする" />
+						</ContextMenu>
+					</v:DropDownMenuButton.DropDownMenu>
+					<Image Source="/Resources/Icons/Bookmark.png" />
+				</v:DropDownMenuButton>
+				<Separator />
+				<Button ToolTip="ログを削除して閉じる"
+						cal:Message.Attach="DeleteCacheAndClose">
+					<Image Source="/Resources/Icons/Delete.png" />
+				</Button>
+				<Button ToolTip="閉じる"
+						cal:Message.Attach="Close">
+					<Image Source="/Resources/Icons/Close.png" />
+				</Button>
+			</ToolBar>
+		</Grid>
+		<ToolBar Name="SearchToolBar"
+				 Visibility="Collapsed"
+				 Padding="16,4,0,4"
+				 Grid.Row="1">
+			<Border Width="128"
+					Margin="0,0,4,0"
+					Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}"
+					BorderThickness="1"
+					BorderBrush="{StaticResource MetroControlDarkBrush}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<toolkit:WatermarkTextBox Name="SearchTextBox"
+											  Grid.Column="1"
+											  BorderThickness="0"
+											  Background="Transparent"
+											  Padding="2"
+											  Watermark="検索"
+											  cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+											  cal:Message.Attach="[Event TextChanged] = [SearchIncremental]; [Key Enter ActiveOnFocus] = [SearchNext]; [Key Shift+Enter ActiveOnFocus] = [SearchPrevious]; [Key Escape ActiveOnFocus] = [HideSearchBar]" />
+					<Image Source="/Resources/Icons/Search.png"
+						   Margin="2,0,0,0"
+						   VerticalAlignment="Center" />
+				</Grid>
+			</Border>
+			<Button cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+					cal:Message.Attach="SearchPrevious">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Resources/Icons/Previous.png" />
+					<TextBlock Text="前へ"
+							   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ButtonBase}}"
+							   Margin="2,0,0,0" />
+				</StackPanel>
+			</Button>
+			<Button cal:Action.TargetWithoutContext="{Binding ElementName=Container}"
+					cal:Message.Attach="SearchNext">
+				<StackPanel Orientation="Horizontal">
+					<Image Source="/Resources/Icons/Next.png" />
+					<TextBlock Text="次へ"
+							   Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ButtonBase}}"
+							   Margin="2,0,0,0" />
+				</StackPanel>
+			</Button>
+			<CheckBox Name="SearchCaseSensitiveCheckBox"
+					  Content="大文字小文字を区別" />
+		</ToolBar>
+		<Border Name="WebControlContainer"
+				Grid.Row="2" />
+		<ContentControl Grid.Row="2"
+						Style="{StaticResource InformationBarStyle}"
+						Content="{Binding ProgressState.CurrentError.Exception.Message}"
+						Visibility="{Binding ProgressState.HasError, Converter={StaticResource BooleanToVisibilityConverter}}" />
+	</Grid>
+</UserControl>

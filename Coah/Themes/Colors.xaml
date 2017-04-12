@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:PresentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options">
+	<FontFamily x:Key="MetroFontFamilyNormal">Segoe UI, Meiryo UI</FontFamily>
+
+	<SolidColorBrush x:Key="MetroAccentBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#007ACC" />
+	<SolidColorBrush x:Key="MetroAccentTextBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#FFFFFF" />
+	<SolidColorBrush x:Key="MetroControlBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#DEDEDE" />
+	<SolidColorBrush x:Key="MetroControlDarkBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#CCCEDB" />
+	<SolidColorBrush x:Key="MetroControlDarkDarkBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#717171" />
+	<SolidColorBrush x:Key="MetroControlLightBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#F3F3F3" />
+	<SolidColorBrush x:Key="MetroControlLightLightBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#F9F9F9" />
+	<SolidColorBrush x:Key="MetroWindowBackgroundBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#EFEFF2" />
+	<SolidColorBrush x:Key="MetroWindowBorderBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#9B9FB9" />
+	<SolidColorBrush x:Key="MetroWindowDarkBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#2C2C2C" />
+	<SolidColorBrush x:Key="MetroHighlightBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#C9DEF5" />
+
+	<!-- MenuItem -->
+	<SolidColorBrush x:Key="MenuItemHighlightBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="{Binding Color, Source={StaticResource MetroHighlightBrush}}" />
+	<SolidColorBrush x:Key="MenuItemTextBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="{DynamicResource {x:Static SystemColors.WindowTextColorKey}}" />
+	<SolidColorBrush x:Key="MenuItemDropDownBorderBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="{Binding Color, Source={StaticResource MetroControlDarkBrush}}" />
+	<SolidColorBrush x:Key="MenuItemDropDownBackgroundBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="{Binding Color, Source={StaticResource MetroControlLightBrush}}" />
+	<SolidColorBrush x:Key="MenuItemSeparatorBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="#E0E3E6" />
+	<SolidColorBrush x:Key="MenuItemArrowBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="{Binding Color, Source={StaticResource MetroControlDarkDarkBrush}}" />
+	<SolidColorBrush x:Key="MenuItemArrowHighlightBrush"
+					 PresentationOptions:Freeze="True"
+					 Color="{Binding Color, Source={StaticResource MetroAccentBrush}}" />
+</ResourceDictionary>

@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="Linearstar.Coah.Views.LocationTreeView"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:cal="http://www.caliburnproject.org"
+			 xmlns:v="clr-namespace:Linearstar.Coah.Views"
+			 xmlns:vm="clr-namespace:Linearstar.Coah.ViewModels"
+			 mc:Ignorable="d"
+			 d:DesignHeight="300"
+			 d:DesignWidth="300"
+			 d:DataContext="{d:DesignInstance vm:LocationTreeViewModel}"
+			 IsTabStop="False">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" />
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<ToolBar HorizontalContentAlignment="Right"
+				 Padding="16,8,8,4">
+			<ToolBar.Header>
+				<TextBlock Text="場所"
+						   Style="{StaticResource ToolbarHeaderTextBlockStyle}" />
+			</ToolBar.Header>
+			<Button ToolTip="場所を追加">
+				<Image Source="/Resources/Icons/LocationAdd.png" />
+			</Button>
+			<Button ToolTip="最新の情報に更新">
+				<Image Source="/Resources/Icons/Refresh.png" />
+			</Button>
+		</ToolBar>
+		<TreeView Grid.Row="1"
+				  BorderThickness="0"
+				  Background="Transparent"
+				  ItemsSource="{Binding Items}"
+				  Padding="0"
+				  cal:Message.Attach="[Event SelectedItemChanged] = [ShowLocation($this.SelectedItem)]">
+			<TreeView.Resources>
+				<HierarchicalDataTemplate DataType="{x:Type vm:LocationViewModel}"
+										  ItemsSource="{Binding Items}">
+					<TextBlock Text="{Binding Location.Name}" />
+				</HierarchicalDataTemplate>
+			</TreeView.Resources>
+			<TreeView.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel IsItemsHost="True"
+								Margin="0,4,0,0" />
+				</ItemsPanelTemplate>
+			</TreeView.ItemsPanel>
+		</TreeView>
+	</Grid>
+</UserControl>

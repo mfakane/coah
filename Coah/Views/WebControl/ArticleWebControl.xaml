@@ -1,0 +1,46 @@
+﻿<cef:ChromiumWebBrowser x:Class="Linearstar.Coah.Views.ArticleWebControl"
+						xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+						xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+						xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+						xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+						xmlns:cal="http://www.caliburnproject.org"
+						xmlns:vm="clr-namespace:Linearstar.Coah.ViewModels"
+						xmlns:cef="clr-namespace:CefSharp.Wpf;assembly=CefSharp.Wpf"
+						mc:Ignorable="d">
+	<cef:ChromiumWebBrowser.Resources>
+		<ContextMenu x:Key="WebControlContextMenu">
+			<MenuItem Header="コピー(_C)"
+					  Click="CopyMenuItem_Click" />
+			<Separator />
+			<MenuItem Header="引用して返信(_Q)" />
+			<MenuItem Header="選択範囲内の URL を開く(_O)" />
+		</ContextMenu>
+		<ContextMenu x:Key="ArticleCommentContextMenu"
+					 d:DataContext="{d:DesignInstance vm:ArticleCommentViewModel}">
+			<MenuItem IsEnabled="False">
+				<MenuItem.Header>
+					<TextBlock Text="{Binding Comment.Index, StringFormat=&gt;&gt;{0}}" />
+				</MenuItem.Header>
+			</MenuItem>
+			<Separator />
+			<MenuItem Header="このコメントに返信(_R)" />
+			<MenuItem Header="引用して返信(_Q)" />
+			<Separator />
+			<MenuItem Header="ブラウザで開く(_B)"
+					  cal:Message.Attach="OpenInBrowser" />
+		</ContextMenu>
+		<ContextMenu x:Key="ArticleCommentIdentifierContextMenu"
+					 d:DataContext="{d:DesignInstance vm:ArticleCommentViewModel}">
+			<MenuItem IsEnabled="False">
+				<MenuItem.Header>
+					<TextBlock Text="{Binding Comment.Sender.Identifier, StringFormat=ID:{0}}" />
+				</MenuItem.Header>
+			</MenuItem>
+			<Separator />
+			<MenuItem Header="ID をコピー(_C)"
+					  cal:Message.Attach="CopyIdentifier" />
+			<Separator />
+			<MenuItem Header="ID をミュート(_M)" />
+		</ContextMenu>
+	</cef:ChromiumWebBrowser.Resources>
+</cef:ChromiumWebBrowser>

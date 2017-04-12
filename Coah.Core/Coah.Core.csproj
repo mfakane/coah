@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+	<PropertyGroup>
+		<TargetFramework>netstandard1.1</TargetFramework>
+	</PropertyGroup>
+	<ItemGroup>
+	  <PackageReference Include="System.Composition" Version="1.0.31" />
+	  <PackageReference Include="System.Linq.Parallel" Version="4.3.0" />
+	  <PackageReference Include="System.Runtime.Serialization.Json" Version="4.3.0" />
+	  <PackageReference Include="System.Runtime.Serialization.Primitives" Version="4.3.0" />
+	  <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.3.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Properties\" />
+	</ItemGroup>
+</Project>

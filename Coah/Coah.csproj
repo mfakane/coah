@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F43ED606-7464-4F2B-A9E4-26706CF195E7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Linearstar.Coah</RootNamespace>
+    <AssemblyName>Coah</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\ClientHost.cs" />
+    <Compile Include="Models\ClientSettings.cs" />
+    <Compile Include="Models\FileSystemDirectory.cs" />
+    <Compile Include="Models\FileSystemFile.cs" />
+    <Compile Include="Models\FileSystemSpecialDirectories.cs" />
+    <Compile Include="Models\HelperResult.cs" />
+    <Compile Include="Models\ScriptConsole.cs" />
+    <Compile Include="Models\Skin.cs" />
+    <Compile Include="Models\SkinResource.cs" />
+    <Compile Include="Models\SkinTemplate.cs" />
+    <Compile Include="Models\TextTransform.cs" />
+    <Compile Include="Models\Viewer.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModels\ArticleCommentViewModel.cs" />
+    <Compile Include="ViewModels\ArticlePageViewModel.cs" />
+    <Compile Include="ViewModels\ArticleSummaryViewModel.cs" />
+    <Compile Include="ViewModels\ClientViewModel.cs" />
+    <Compile Include="ViewModels\FeedPageViewModel.cs" />
+    <Compile Include="ViewModels\FeedSummaryViewModel.cs" />
+    <Compile Include="ViewModels\IPageViewModel.cs" />
+    <Compile Include="ViewModels\LocationTreeViewModel.cs" />
+    <Compile Include="ViewModels\LocationViewModel.cs" />
+    <Compile Include="ViewModels\ScriptConsoleViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\ToolViewModel.cs" />
+    <Compile Include="ViewModels\ViewerViewModel.cs" />
+    <Compile Include="Views\ArticlePageView.xaml.cs">
+      <DependentUpon>ArticlePageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Converters\ValueTypeConverter.cs" />
+    <Compile Include="Views\Converters\InverseBooleanToVisibilityConverter.cs" />
+    <Compile Include="Views\Converters\VisibilityToBooleanConverter.cs" />
+    <Compile Include="Views\DropDownMenuButton.cs" />
+    <Compile Include="Views\FeedPageView.xaml.cs">
+      <DependentUpon>FeedPageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GenericStyleSelector.cs" />
+    <Compile Include="Views\KeyTrigger.cs" />
+    <Compile Include="Views\LocationTreeView.xaml.cs">
+      <DependentUpon>LocationTreeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MetroWindowBehavior.cs" />
+    <Compile Include="Views\ScreenHelper.cs" />
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SplitMenuButton.cs" />
+    <Compile Include="Views\ViewerView.xaml.cs">
+      <DependentUpon>ViewerView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WebControl\ArticleWebControl.xaml.cs">
+      <DependentUpon>ArticleWebControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WebControl\PreviewPopup.xaml.cs">
+      <DependentUpon>PreviewPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WebControl\WebScriptFormatProvider.cs" />
+    <Compile Include="Views\WebControl\WebScriptObject.cs" />
+    <Compile Include="Views\WindowOptions.cs" />
+    <None Include="Build\AfterBuild.ps1" />
+    <None Include="Resources\Skins\Default\Index.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Skins\Default\Megalith.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Skins\Default\Megalopolis.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Skins\Default\Script.js.map">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Skins\Default\Style.less">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\ArticleMarkerNew.png" />
+    <Resource Include="Resources\Icons\ArticleMarkerRead.png" />
+    <Resource Include="Resources\Icons\ArticleMarkerUpdated.png" />
+    <Resource Include="Resources\Icons\Bookmark.png" />
+    <Resource Include="Resources\Icons\BookmarkNew.png" />
+    <Resource Include="Resources\Icons\Clipboard.png" />
+    <Resource Include="Resources\Icons\Close.png" />
+    <Resource Include="Resources\Icons\Compass.png" />
+    <Resource Include="Resources\Icons\Delete.png" />
+    <Resource Include="Resources\Icons\DisplayRange.png" />
+    <Resource Include="Resources\Icons\Down.png" />
+    <Resource Include="Resources\Icons\Filter.png" />
+    <Resource Include="Resources\Icons\FolderNew.png" />
+    <Resource Include="Resources\Icons\FolderOpen.png" />
+    <Resource Include="Resources\Icons\GroupHorizontal.png" />
+    <Resource Include="Resources\Icons\GroupVertical.png" />
+    <Resource Include="Resources\Icons\History.png" />
+    <Resource Include="Resources\Icons\Location.png" />
+    <Resource Include="Resources\Icons\LocationAdd.png" />
+    <Resource Include="Resources\Icons\LocationSave.png" />
+    <Resource Include="Resources\Icons\Next.png" />
+    <Resource Include="Resources\Icons\Paste.png" />
+    <Resource Include="Resources\Icons\Previous.png" />
+    <Resource Include="Resources\Icons\Print.png" />
+    <Resource Include="Resources\Icons\Refresh.png" />
+    <Resource Include="Resources\Icons\Search.png" />
+    <Resource Include="Resources\Icons\Settings.png" />
+    <Resource Include="Resources\Icons\Stop.png" />
+    <Resource Include="Resources\Icons\Tag.png" />
+    <Resource Include="Resources\Icons\Up.png" />
+    <Resource Include="Resources\Icons\WebBrowser.png" />
+    <Resource Include="Resources\Icons\WebOpen.png" />
+    <Resource Include="Resources\Icons\Write.png" />
+    <Resource Include="Resources\Licenses\AvalonDock.txt" />
+    <Resource Include="Resources\Licenses\Caliburn.Micro.txt" />
+    <Resource Include="Resources\Licenses\CEF.txt" />
+    <Resource Include="Resources\Licenses\CefSharp.txt" />
+    <Resource Include="Resources\Licenses\Extended WPF Toolkit.txt" />
+    <Resource Include="Resources\Licenses\RazorEngine.txt" />
+    <Resource Include="Resources\Licenses\Rx.txt" />
+    <Content Include="Resources\Skins\Default\Script.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Skins\Default\Style.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Skins\Default\Style.min.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Resources\Skins\Default\Script.ts">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </TypeScriptCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Themes\Colors.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Controls.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Popup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Text.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\ToolBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Window.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ArticlePageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\FeedPageView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LocationTreeView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ViewerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WebControl\ArticleWebControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\WebControl\PreviewPopup.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Coah.Core\Coah.Core.csproj">
+      <Project>{8a8931f5-a427-4610-96ee-9787e0347711}</Project>
+      <Name>Coah.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Caliburn.Micro">
+      <Version>3.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="CefSharp.Wpf">
+      <Version>55.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="Dragablz">
+      <Version>0.0.3.186</Version>
+    </PackageReference>
+    <PackageReference Include="Extended.Wpf.Toolkit">
+      <Version>3.0.0</Version>
+    </PackageReference>
+    <PackageReference Include="MicrosoftExpressionInteractions">
+      <Version>3.0.40218</Version>
+    </PackageReference>
+    <PackageReference Include="RazorEngine">
+      <Version>3.9.3</Version>
+    </PackageReference>
+    <PackageReference Include="System.Composition">
+      <Version>1.0.31</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive">
+      <Version>3.1.1</Version>
+    </PackageReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

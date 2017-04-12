@@ -1,0 +1,43 @@
+﻿@using Linearstar.Coah;
+@using Linearstar.Coah.Megalith;
+@inherits SkinTemplate<MegalithArticleSummary, MegalithArticle, MegalithArticleComment>
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="Style.css" />
+	<script src="Script.js"></script>
+	<title>@Summary.Title</title>
+</head>
+<body>
+	<div id="body">
+		@RenderBody(Article.Body)
+	</div>
+	<div id="afterword">
+		@RenderBody(Article.Afterword)
+	</div>
+	<dl id="comments">
+		@Comments(ArticleComment)
+	</dl>
+</body>
+</html>
+
+@helper ArticleComment(MegalithArticleComment item)
+{
+	<dt id="@CommentId(item)" class="res">
+		<span class="idx">@CommentIndex(item) :</span>
+		<span class="name">@Raw(item.Sender.Name.Replace("</b>", "<span class=\"trip\">").Replace("<b>", "</span>"))</span>
+		<span class="mail">[@item.Sender.Mail]</span>
+		<span class="date">@item.DateTime.ToLocalTime().ToString("yyyy/MM/dd HH:mm:ss.ff")</span>
+		@if (!string.IsNullOrEmpty(item.Sender.Identifier))
+		{
+			<span class="id">
+				ID:@CommentSenderIdentifier(item)
+			</span>
+		}
+	</dt>
+	<dd class="body">
+		@RenderBody(item.GetBodyHtml())
+	</dd>
+}
