@@ -139,7 +139,6 @@
     <Compile Include="Views\WebControl\WebScriptFormatProvider.cs" />
     <Compile Include="Views\WebControl\WebScriptObject.cs" />
     <Compile Include="Views\WindowOptions.cs" />
-    <None Include="Build\AfterBuild.ps1" />
     <None Include="Resources\Skins\Default\Index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
