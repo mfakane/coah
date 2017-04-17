@@ -1,7 +1,7 @@
 ﻿<Application x:Class="Linearstar.Coah.App"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
 			 xmlns:dz="clr-namespace:Dragablz;assembly=Dragablz"
@@ -20,6 +20,7 @@
 			<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
 			<v:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter" />
 			<v:VisibilityToBooleanConverter x:Key="VisibilityToBooleanConverter" />
+			<v:CompareConverter x:Key="CompareConverter" />
 			<Style x:Key="ToolbarHeaderTextBlockStyle"
 				   TargetType="TextBlock"
 				   BasedOn="{StaticResource MetroTextSubtleStyle}">

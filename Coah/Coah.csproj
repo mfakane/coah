@@ -109,6 +109,7 @@
     <Compile Include="Views\ArticlePageView.xaml.cs">
       <DependentUpon>ArticlePageView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Converters\CompareConverter.cs" />
     <Compile Include="Views\Converters\ValueTypeConverter.cs" />
     <Compile Include="Views\Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Views\Converters\VisibilityToBooleanConverter.cs" />
