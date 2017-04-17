@@ -272,14 +272,14 @@
 						<TabItem Header="自動更新">
 							<StackPanel Margin="16,0">
 								<TextBlock Text="利用可能な更新はありません。" />
-								<Button Content="更新を今すぐチェックする"
+								<Button Content="今すぐ更新を確認"
 										Margin="0,0,0,16" />
-								<TextBlock Text="更新をチェックする頻度" />
+								<TextBlock Text="自動的に更新を確認する頻度" />
 								<ComboBox>
 									<ComboBoxItem IsSelected="True">1 週間</ComboBoxItem>
 								</ComboBox>
-								<TextBlock Text="更新がない場合、チェック頻度は自動的に延長されます。" />
-								<TextBlock Text="現在のチェック頻度: 1 週間"
+								<TextBlock Text="更新がない場合、確認頻度は自動的に延長されます。" />
+								<TextBlock Text="現在の確認頻度: 1 週間"
 										   Margin="0,0,0,16" />
 							</StackPanel>
 						</TabItem>
