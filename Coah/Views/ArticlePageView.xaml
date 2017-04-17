@@ -179,8 +179,13 @@
 						Margin="0,0,4,0"
 						cal:Action.TargetWithoutContext="{Binding ArticleSummary}"
 						cal:Message.Attach="OpenInBrowser" />
-				<Button Style="{StaticResource HyperlinkButtonStyle}">
+				<Button Style="{StaticResource HyperlinkButtonStyle}"
+						Visibility="{Binding Model.ArticleSummary.Author, Converter={StaticResource CompareConverter}, ConverterParameter=null}">
 					<TextBlock Text="{Binding Model.ArticleSummary.CommentCount, StringFormat=(0)}" />
+				</Button>
+				<Button Style="{StaticResource HyperlinkButtonStyle}"
+						Visibility="{Binding Model.ArticleSummary.Author, Converter={StaticResource CompareConverter}, ConverterParameter=!null}">
+					<TextBlock Text="{Binding Model.ArticleSummary.Author, StringFormat=({0})}" />
 				</Button>
 			</ToolBar>
 			<ToolBar Grid.Column="1"
