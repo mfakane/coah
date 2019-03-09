@@ -21,7 +21,9 @@ namespace Linearstar.Coah.Megalith
 
 		public static async Task<MegalithFeed> LoadFile(MegalithFeedSummary summary, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
 		{
-			var rt = new MegalithFeed(summary);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var rt = new MegalithFeed(summary);
 			var data = await summary.FeedProvider.LocalStorage.ReadAllText(summary.ParsedUri.DataPath, MegalithFeedProvider.Encoding).ConfigureAwait(false);
 
 			if (data != null)
@@ -44,7 +46,7 @@ namespace Linearstar.Coah.Megalith
 
 			var files = await directory.GetFiles("*.aft.dat");
 
-			return await files.Select(_ => GetArticleSummaryInstance(new MegalithArticleUri(FeedSummary, _.Name.Substring(0, _.Name.IndexOf('.')), int.Parse(Summary.AbsoluteUri.Query("log"))))).WhenAll();
+			return await files.Select(x => GetArticleSummaryInstance(new MegalithArticleUri(FeedSummary, x.Name.Substring(0, x.Name.IndexOf('.')), int.Parse(Summary.AbsoluteUri.Query("log"))))).WhenAll();
 		}
 
 		public override async Task<ArticleSummary[]> Refresh(CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
@@ -54,7 +56,7 @@ namespace Linearstar.Coah.Megalith
 				progress?.Report(ProgressInfo.Download(FeedSummary));
 				hc.DefaultRequestHeaders.IfModifiedSince = Summary.LastModified;
 
-				var oldArticles = new HashSet<Uri>(Articles?.Select(_ => _.AbsoluteUri) ?? Enumerable.Empty<Uri>());
+				var oldArticles = new HashSet<Uri>(Articles?.Select(x => x.AbsoluteUri) ?? Enumerable.Empty<Uri>());
 
 				using (var res = await hc.GetAsync(FeedSummary.ParsedUri.FeedId >= FeedSummary.Location.Items.Count
 					? FeedSummary.ParsedUri.DataUriIfNewest
@@ -64,7 +66,7 @@ namespace Linearstar.Coah.Megalith
 						var data = await res.Content.ReadAsByteArrayAsync();
 
 						await FeedProvider.LocalStorage.WriteAllBytes(FeedSummary.ParsedUri.DataPath, data);
-						await Parse(MegalithFeedProvider.GetString(data), progress, _ => !oldArticles.Contains(_.AbsoluteUri));
+						await Parse(MegalithFeedProvider.GetString(data), progress, x => !oldArticles.Contains(x.AbsoluteUri));
 						Summary.ArticleCount = Articles.Count;
 						Summary.LastModified = res.Content.Headers.LastModified;
 						await Summary.Save(); ;
@@ -74,13 +76,13 @@ namespace Linearstar.Coah.Megalith
 						var data = await FeedProvider.LocalStorage.ReadAllText(FeedSummary.ParsedUri.DataPath, MegalithFeedProvider.Encoding);
 
 						if (data != null)
-							await Parse(data, progress, _ => !oldArticles.Contains(_.AbsoluteUri));
+							await Parse(data, progress, x => !oldArticles.Contains(x.AbsoluteUri));
 					}
 					else
 						res.EnsureSuccessStatusCode();
 			}
 
-			return Articles.Where(_ => _.IsNew).ToArray();
+			return Articles.Where(x => x.IsNew).ToArray();
 		}
 
 		async Task Parse(string content, IProgress<ProgressInfo> progress, Func<ArticleSummary, bool> isNew = null)
@@ -94,7 +96,7 @@ namespace Linearstar.Coah.Megalith
 									  var summary = await MegalithArticleSummary.Parse(this, i, idx + 1);
 
 									  summary.IsNew = isNew?.Invoke(summary) ?? false;
-									  ProgressInfo.Download(Summary, count++, lines.Length);
+                                      progress.Report(ProgressInfo.Download(Summary, count++, lines.Length));
 
 									  return summary;
 								  })

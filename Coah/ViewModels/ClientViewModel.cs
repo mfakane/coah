@@ -27,7 +27,7 @@ namespace Linearstar.Coah.ViewModels
 						foreach (ViewerViewModel i in e.NewItems)
 							winManager.ShowWindow(i);
 
-						foreach (var i in e.NewItems.Cast<ViewerViewModel>().ToDictionary(_ => _, _ => Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.DataContext == _)))
+						foreach (var i in e.NewItems.Cast<ViewerViewModel>().ToDictionary(x => x, x => Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.DataContext == x)))
 							if (i.Value != null)
 							{
 								i.Value.Activated += (sender2, e2) => ActiveItem = i.Key;
@@ -43,7 +43,7 @@ namespace Linearstar.Coah.ViewModels
 						break;
 					case NotifyCollectionChangedAction.Replace:
 					case NotifyCollectionChangedAction.Remove:
-						foreach (var i in e.OldItems.Cast<ViewerViewModel>().ToDictionary(_ => _, _ => Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.DataContext == _)))
+						foreach (var i in e.OldItems.Cast<ViewerViewModel>().ToDictionary(x => x, x => Application.Current.Windows.Cast<Window>().FirstOrDefault(w => w.DataContext == x)))
 							i.Value?.Close();
 
 						if (e.Action == NotifyCollectionChangedAction.Replace)
@@ -55,8 +55,8 @@ namespace Linearstar.Coah.ViewModels
 			LocationTree = new LocationTreeViewModel(this);
 			handler = new CompositeDisposable
 			(
-				Model.OnPropertyChanged(nameof(Model.CurrentViewer)).Subscribe(e => ActiveItem = Items.FirstOrDefault(_ => _.Model == Model.CurrentViewer)),
-				ObservableCollectionWrapper.Create(Model.Viewers, Items, (IViewer _) => new ViewerViewModel(_), _ => _.Model)
+				Model.OnPropertyChanged(nameof(Model.CurrentViewer)).Subscribe(e => ActiveItem = Items.FirstOrDefault(x => x.Model == Model.CurrentViewer)),
+				ObservableCollectionWrapper.Create(Model.Viewers, Items, (IViewer x) => new ViewerViewModel(x), x => x.Model)
 			);
 		}
 

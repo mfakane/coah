@@ -23,8 +23,8 @@ var Coah;
     }
     Coah.clearComments = clearComments;
     function updateSenderIdentifierCounter(senderIdentifier, commentIndices) {
-        for (var _i = 0; _i < commentIndices.length; _i++) {
-            var commentIndex = commentIndices[_i];
+        for (var _i = 0, commentIndices_1 = commentIndices; _i < commentIndices_1.length; _i++) {
+            var commentIndex = commentIndices_1[_i];
             var elem = document.querySelector("#res-" + commentIndex + " .sender-identifier-counter");
             if (elem)
                 elem.textContent = "(" + (commentIndices.indexOf(commentIndex) + 1) + "/" + commentIndices.length + ")";
@@ -44,3 +44,4 @@ window.addEventListener("scroll", function (ev) {
     else
         document.documentElement.classList.add("scrolled");
 });
+//# sourceMappingURL=Script.js.map

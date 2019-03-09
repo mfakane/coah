@@ -25,7 +25,7 @@ namespace Linearstar.Coah
 		protected T GetValue<T>([CallerMemberName] string name = null) =>
 			container?.ContainsKey(name) ?? false
 				? (T)container[name]
-				: default(T);
+				: default;
 
 		protected void SetValue<T>(string name, T value)
 		{

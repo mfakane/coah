@@ -63,7 +63,7 @@ namespace Linearstar.Coah.ViewModels
 						Comments = null;
 					else
 					{
-						var wrapper = ObservableCollectionWrapper.Create(Model.Comments, (IReadOnlyCollection<ArticleComment> items) => items.Select(_ => new ArticleCommentViewModel(_)).ToArray());
+						var wrapper = ObservableCollectionWrapper.Create(Model.Comments, (IReadOnlyCollection<ArticleComment> items) => items.Select(x => new ArticleCommentViewModel(x)).ToArray());
 
 						Comments = wrapper;
 						handler.Add(wrapper);

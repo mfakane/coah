@@ -21,7 +21,7 @@ namespace Linearstar.Coah.ViewModels
 			foreach (var i in Client.Model.Locations)
 				Items.Add(new LocationViewModel(i));
 
-			return Task.WhenAll(Items.Select(_ => _.Load(ProgressState)));
+			return Task.WhenAll(Items.Select(x => x.Load(ProgressState)));
 		}
 
 		public void ShowLocation(LocationViewModel item)

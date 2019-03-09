@@ -35,7 +35,9 @@ namespace Linearstar.Coah.Megalopolis
 
 		public static async Task<MegalopolisArticle> LoadFile(MegalopolisArticleSummary summary, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
 		{
-			var rt = new MegalopolisArticle(summary);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var rt = new MegalopolisArticle(summary);
 			var data = await summary.FeedProvider.LocalStorage.GetFile(summary.ParsedUri.DataPath);
 
 			if (data != null)
@@ -81,7 +83,7 @@ namespace Linearstar.Coah.Megalopolis
 			var count = 0;
 			var items = thread.Comments.AsParallel()
 									   .AsOrdered()
-									   .Select((_, idx) => MegalopolisArticleComment.Parse(ArticleSummary.ParsedUri.AbsoluteUri, idx + 1, _))
+									   .Select((x, idx) => MegalopolisArticleComment.Parse(ArticleSummary.ParsedUri.AbsoluteUri, idx + 1, x))
 									   .Do(_ => progress?.Report(ProgressInfo.Download(Summary, count++, thread.Comments.Length)))
 									   .Cast<ArticleComment>();
 

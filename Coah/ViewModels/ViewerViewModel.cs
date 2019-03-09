@@ -32,7 +32,7 @@ namespace Linearstar.Coah.ViewModels
 				{
 					Items.Count > 1 ? $"({Items.Count})" : null,
 					ActiveItem?.DisplayName ?? "Coah",
-				}.Where(_ => !string.IsNullOrEmpty(_)));
+				}.Where(x => !string.IsNullOrEmpty(x)));
 			set
 			{
 			}
@@ -56,10 +56,10 @@ namespace Linearstar.Coah.ViewModels
 					foreach (IPageViewModel i in e.OldItems)
 						i.ProgressState.PropertyChanged -= ProgressState_PropertyChanged;
 
-				CurrentProgress = Items.Where(_ => _.ProgressState.CurrentProgress != null)
-												 .OrderBy(_ => e.NewItems == null || !e.NewItems.Contains(_))
-												 .ThenBy(_ => _.ProgressState.CurrentProgress.HasCompleted)
-												 .Select(_ => _.ProgressState.CurrentProgress)
+				CurrentProgress = Items.Where(x => x.ProgressState.CurrentProgress != null)
+												 .OrderBy(x => e.NewItems == null || !e.NewItems.Contains(x))
+												 .ThenBy(x => x.ProgressState.CurrentProgress.HasCompleted)
+												 .Select(x => x.ProgressState.CurrentProgress)
 												 .FirstOrDefault();
 			};
 			PropertyChanged += (sender, e) =>
@@ -76,7 +76,7 @@ namespace Linearstar.Coah.ViewModels
 			};
 			handler = new CompositeDisposable
 			(
-				Model.OnPropertyChanged(nameof(Model.CurrentPage)).Subscribe(e => ActiveItem = Items.FirstOrDefault(_ => _.Model == Model.CurrentPage)),
+				Model.OnPropertyChanged(nameof(Model.CurrentPage)).Subscribe(e => ActiveItem = Items.FirstOrDefault(x => x.Model == Model.CurrentPage)),
 				ObservableCollectionWrapper.Create(Model.Pages, Items, (IPage p) =>
 				{
 					switch (p)
@@ -85,7 +85,7 @@ namespace Linearstar.Coah.ViewModels
 						case ArticlePage articlePage: return new ArticlePageViewModel(articlePage);
 						default: return (IPageViewModel)null;
 					}
-				}, _ => _.Model)
+				}, x => x.Model)
 			);
 		}
 
@@ -96,7 +96,7 @@ namespace Linearstar.Coah.ViewModels
 			if (CurrentProgress?.HasCompleted ?? true)
 				CurrentProgress = state.CurrentProgress;
 			else
-				CurrentProgress = Items.Select(_ => _.ProgressState.CurrentProgress).FirstOrDefault(_ => _ != null && (_ == state.CurrentProgress || !_.HasCompleted));
+				CurrentProgress = Items.Select(x => x.ProgressState.CurrentProgress).FirstOrDefault(x => x != null && (x == state.CurrentProgress || !x.HasCompleted));
 		}
 
 		public void Activate() =>

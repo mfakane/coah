@@ -32,7 +32,7 @@ namespace Linearstar.Coah
 
 				var keys = parameters.Dequeue().Replace("Ctrl+", "Control+").Replace("Win+", "Windows+").Split('+');
 				var key = Enum.TryParse<Key>(keys.Last(), true, out var k) ? k : Key.None;
-				var modifiers = keys.Length > 1 ? keys.Take(keys.Length - 1).Select(_ => Enum.TryParse<ModifierKeys>(_, true, out var mk) ? mk : ModifierKeys.None).Aggregate((x, y) => x | y) : ModifierKeys.None;
+				var modifiers = keys.Length > 1 ? keys.Take(keys.Length - 1).Select(x => Enum.TryParse<ModifierKeys>(x, true, out var mk) ? mk : ModifierKeys.None).Aggregate((x, y) => x | y) : ModifierKeys.None;
 
 				return new KeyTrigger
 				{

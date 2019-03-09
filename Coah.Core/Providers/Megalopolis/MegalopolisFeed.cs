@@ -23,7 +23,9 @@ namespace Linearstar.Coah.Megalopolis
 
 		public static async Task<MegalopolisFeed> LoadFile(MegalopolisFeedSummary summary, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
 		{
-			var rt = new MegalopolisFeed(summary);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var rt = new MegalopolisFeed(summary);
 			var data = await summary.FeedProvider.LocalStorage.GetFile(summary.ParsedUri.DataPath).ConfigureAwait(false);
 
 			if (data != null)
@@ -47,7 +49,7 @@ namespace Linearstar.Coah.Megalopolis
 
 			var files = await directory.GetFiles("*.json");
 
-			return await files.Select(_ => GetArticleSummaryInstance(new MegalopolisArticleUri(FeedSummary, Path.GetFileNameWithoutExtension(_.Name)))).WhenAll();
+			return await files.Select(x => GetArticleSummaryInstance(new MegalopolisArticleUri(FeedSummary, Path.GetFileNameWithoutExtension(x.Name)))).WhenAll();
 		}
 
 		public override async Task<ArticleSummary[]> Refresh(CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
@@ -57,7 +59,7 @@ namespace Linearstar.Coah.Megalopolis
 				progress?.Report(ProgressInfo.Download(FeedSummary));
 				hc.DefaultRequestHeaders.IfModifiedSince = Summary.LastModified;
 
-				var oldArticles = new HashSet<Uri>(Articles?.Select(_ => _.AbsoluteUri) ?? Enumerable.Empty<Uri>());
+				var oldArticles = new HashSet<Uri>(Articles?.Select(x => x.AbsoluteUri) ?? Enumerable.Empty<Uri>());
 
 				using (var res = await hc.GetAsync(FeedSummary.ParsedUri.DataUri, cancellationToken).ConfigureAwait(false))
 					if (res.IsSuccessStatusCode)
@@ -67,7 +69,7 @@ namespace Linearstar.Coah.Megalopolis
 						await FeedProvider.LocalStorage.WriteAllBytes(FeedSummary.ParsedUri.DataPath, data);
 
 						using (var ms = new MemoryStream(data))
-							await Parse((SubjectResponse)new DataContractJsonSerializer(typeof(SubjectResponse)).ReadObject(ms), progress, _ => !oldArticles.Contains(_.AbsoluteUri));
+							await Parse((SubjectResponse)new DataContractJsonSerializer(typeof(SubjectResponse)).ReadObject(ms), progress, x => !oldArticles.Contains(x.AbsoluteUri));
 
 						Summary.ArticleCount = Articles.Count;
 						Summary.LastModified = res.Content.Headers.LastModified;
@@ -79,13 +81,13 @@ namespace Linearstar.Coah.Megalopolis
 
 						if (data != null)
 							using (var fs = await data.Open(FileAccessMode.Read))
-								await Parse((SubjectResponse)new DataContractJsonSerializer(typeof(SubjectResponse)).ReadObject(fs), progress, _ => !oldArticles.Contains(_.AbsoluteUri));
+								await Parse((SubjectResponse)new DataContractJsonSerializer(typeof(SubjectResponse)).ReadObject(fs), progress, x => !oldArticles.Contains(x.AbsoluteUri));
 					}
 					else
 						res.EnsureSuccessStatusCode();
 			}
 
-			return Articles.Where(_ => _.IsNew).ToArray();
+			return Articles.Where(x => x.IsNew).ToArray();
 		}
 
 		async Task Parse(SubjectResponse subj, IProgress<ProgressInfo> progress, Func<ArticleSummary, bool> isNew = null)
@@ -97,7 +99,7 @@ namespace Linearstar.Coah.Megalopolis
 											 var summary = await MegalopolisArticleSummary.Parse(this, i, idx + 1);
 
 											 summary.IsNew = isNew?.Invoke(summary) ?? false;
-											 ProgressInfo.Download(Summary, count++, subj.Entries.Length);
+                                             progress.Report(ProgressInfo.Download(Summary, count++, subj.Entries.Length));
 
 											 return summary;
 										 })

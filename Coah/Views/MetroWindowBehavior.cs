@@ -47,7 +47,7 @@ namespace Linearstar.Coah.Views
 
 		protected override void OnAttached()
 		{
-			TargetWindow.SourceInitialized += AssociatedObject_SourceInitialized;
+			TargetWindow.SourceInitialized += AssociatedObjectxSourceInitialized;
 
 			switch (TargetWindow.ResizeMode)
 			{
@@ -72,22 +72,22 @@ namespace Linearstar.Coah.Views
 		void AddBorder()
 		{
 			Window border = null;
-			var closed = Observable.FromEvent<EventHandler, EventArgs>(_ => (sender, e) => _(e), _ => border.Closed += _, _ => border.Closed -= _);
+			var closed = Observable.FromEvent<EventHandler, EventArgs>(x => (sender, e) => x(e), x => border.Closed += x, x => border.Closed -= x);
 
 			TargetWindow.BorderThickness = new Thickness(0);
 
 			border = CreateBorderWindow();
-			disposables.Add(Observable.FromEvent<EventHandler, EventArgs>(_ => (sender, e) => _(e), _ => TargetWindow.LocationChanged += _, _ => TargetWindow.LocationChanged -= _)
-									  .Merge(Observable.FromEvent<EventHandler, EventArgs>(_ => (sender, e) => _(e), _ => TargetWindow.Activated += _, _ => TargetWindow.Activated -= _))
-									  .Merge(Observable.FromEvent<SizeChangedEventHandler, EventArgs>(_ => (sender, e) => _(e), _ => TargetWindow.SizeChanged += _, _ => TargetWindow.SizeChanged -= _))
-									  .Merge(Observable.FromEvent<EventHandler, EventArgs>(_ => (sender, e) => _(e), _ => TargetWindow.StateChanged += _, _ => TargetWindow.StateChanged -= _))
-									  .Merge(Observable.FromEvent<DependencyPropertyChangedEventHandler, DependencyPropertyChangedEventArgs>(_ => (sender, e) => _(e), _ => TargetWindow.IsVisibleChanged += _, _ => TargetWindow.IsVisibleChanged -= _).Select(_ => EventArgs.Empty))
-									  .Subscribe(_ => SetBorderWindowLocation(border)));
+			disposables.Add(Observable.FromEvent<EventHandler, EventArgs>(x => (sender, e) => x(e), x => TargetWindow.LocationChanged += x, x => TargetWindow.LocationChanged -= x)
+									  .Merge(Observable.FromEvent<EventHandler, EventArgs>(x => (sender, e) => x(e), x => TargetWindow.Activated += x, x => TargetWindow.Activated -= x))
+									  .Merge(Observable.FromEvent<SizeChangedEventHandler, EventArgs>(x => (sender, e) => x(e), x => TargetWindow.SizeChanged += x, x => TargetWindow.SizeChanged -= x))
+									  .Merge(Observable.FromEvent<EventHandler, EventArgs>(x => (sender, e) => x(e), x => TargetWindow.StateChanged += x, x => TargetWindow.StateChanged -= x))
+									  .Merge(Observable.FromEvent<DependencyPropertyChangedEventHandler, DependencyPropertyChangedEventArgs>(x => (sender, e) => x(e), x => TargetWindow.IsVisibleChanged += x, x => TargetWindow.IsVisibleChanged -= x).Select(x => EventArgs.Empty))
+									  .Subscribe(x => SetBorderWindowLocation(border)));
 			SetBorderWindowLocation(border);
 			border.Show();
 
-			disposables.Add(Observable.FromEvent<EventHandler, EventArgs>(_ => (sender, e) => _(e), _ => TargetWindow.Closed += _, _ => TargetWindow.Closed -= _)
-									  .Subscribe(_ => border.Close()));
+			disposables.Add(Observable.FromEvent<EventHandler, EventArgs>(x => (sender, e) => x(e), x => TargetWindow.Closed += x, x => TargetWindow.Closed -= x)
+									  .Subscribe(x => border.Close()));
 		}
 
 		async void SetBorderWindowLocation(Window border)
@@ -171,25 +171,25 @@ namespace Linearstar.Coah.Views
 
 				var handle = borderSource.Handle;
 
-				handle.SetWindowLong(NativeMethods.GWL_EXSTYLE, new IntPtr(handle.GetWindowLong(NativeMethods.GWL_EXSTYLE).ToInt32() ^ NativeMethods.WS_EX_APPWINDOW | NativeMethods.WS_EX_NOACTIVATE));
+				handle.SetWindowLong(NativeMethods.GWL_EXSTYLE, new IntPtr(handle.GetWindowLong(NativeMethods.GWL_EXSTYLE).ToInt32() & ~NativeMethods.WS_EX_APPWINDOW | NativeMethods.WS_EX_NOACTIVATE));
 				borderSource.AddHook((IntPtr hWnd, int message, IntPtr wParam, IntPtr lParam, ref bool handled) =>
 				{
 					switch (message)
 					{
-						case /* WM_MOUSEACTIVATE */ 0x21:
+						case /* WMxMOUSEACTIVATE */ 0x21:
 							handled = true;
 
 							return new IntPtr(3);
-						case /* WM_LBUTTONDOWN */ 0x201:
+						case /* WMxLBUTTONDOWN */ 0x201:
 							if (TargetWindow.ResizeMode != ResizeMode.NoResize && hWndSource != null)
 							{
 								var pt = new Point((int)lParam & 0xFFFF, ((int)lParam >> 16) & 0xFFFF);
 
-								hWndSource.Handle.PostMessage(/* WM_NCLBUTTONDOWN */ 0xA1, new IntPtr(GetHitBorder(rt, pt)), IntPtr.Zero);
+								hWndSource.Handle.PostMessage(/* WMxNCLBUTTONDOWN */ 0xA1, new IntPtr(GetHitBorder(rt, pt)), IntPtr.Zero);
 							}
 
 							break;
-						case  /* WM_NCHITTEST */ 0x84:
+						case  /* WMxNCHITTEST */ 0x84:
 							if (TargetWindow.ResizeMode != ResizeMode.NoResize)
 							{
 								var pt = rt.PointFromScreen(new Point((int)lParam & 0xFFFF, ((int)lParam >> 16) & 0xFFFF));
@@ -277,12 +277,12 @@ namespace Linearstar.Coah.Views
 
 		protected override void OnDetaching()
 		{
-			TargetWindow.SourceInitialized -= AssociatedObject_SourceInitialized;
+			TargetWindow.SourceInitialized -= AssociatedObjectxSourceInitialized;
 			disposables.Dispose();
 			base.OnDetaching();
 		}
 
-		void AssociatedObject_SourceInitialized(object sender, EventArgs e)
+		void AssociatedObjectxSourceInitialized(object sender, EventArgs e)
 		{
 			UpdateWindowChrome();
 

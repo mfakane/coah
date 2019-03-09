@@ -37,7 +37,7 @@ namespace Linearstar.Coah.Models
 		public Client([ImportMany] IEnumerable<FeedProvider> providers)
 		{
 			Viewers.Add(new Viewer(this));
-			Providers = providers.OrderByDescending(_ => _.Metadata.Priority).ToArray();
+			Providers = providers.OrderByDescending(x => x.Metadata.Priority).ToArray();
 		}
 
 		public async Task Load()
@@ -60,32 +60,62 @@ namespace Linearstar.Coah.Models
 			return location;
 		}
 
-		public Task<Location> GetLocation(Uri uri) =>
-			Providers.Select(_ => _.GetLocation(uri, false).ToObservable()).Concat().FirstOrDefaultAsync(_ => _ != null).ToTask();
+        public async Task<Location> GetLocation(Uri uri)
+        {
+            foreach (var provider in Providers)
+            {
+                var location = await provider.GetLocation(uri, false).ConfigureAwait(false);
+                if (location != null) return location;
+            }
 
-		public Task<Location> GetLocation<TFeedProvider>(Uri uri)
-			where TFeedProvider : FeedProvider =>
-			Providers.OfType<TFeedProvider>().Select(_ => _.GetLocation(uri, false).ToObservable()).Concat().FirstOrDefaultAsync(_ => _ != null).ToTask();
+            return null;
+        }
 
-		public Task<FeedSummary> GetFeedSummary(Uri uri) =>
-			Providers.Select(_ => _.GetFeedSummary(uri, false).ToObservable()).Concat().FirstOrDefaultAsync(_ => _ != null).ToTask();
+		public async Task<Location> GetLocation<TFeedProvider>(Uri uri)
+			where TFeedProvider : FeedProvider
+        {
+            foreach (var provider in Providers.OfType<TFeedProvider>())
+            {
+                var location = await provider.GetLocation(uri, false).ConfigureAwait(false);
+                if (location != null) return location;
+            }
 
-		public Task<ArticleSummary> GetArticleSummary(Uri uri) =>
-			Providers.Select(_ => _.GetArticleSummary(uri, false).ToObservable()).Concat().FirstOrDefaultAsync(_ => _ != null).ToTask();
+            return null;
+        }
+
+		public async Task<FeedSummary> GetFeedSummary(Uri uri)
+        {
+            foreach (var provider in Providers)
+            {
+                var feedSummary = await provider.GetFeedSummary(uri, false).ConfigureAwait(false);
+                if (feedSummary != null) return feedSummary;
+            }
+
+            return null;
+        }
+
+		public async Task<ArticleSummary> GetArticleSummary(Uri uri)
+        {
+            foreach (var provider in Providers)
+            {
+                var articleSummary = await provider.GetArticleSummary(uri, false).ConfigureAwait(false);
+                if (articleSummary != null) return articleSummary;
+            }
+
+            return null;
+        }
 
 		public ArticlePage ShowArticle(ArticleSummary articleSummary)
 		{
 			foreach (var i in Viewers)
 			{
-				var match = i.Pages.OfType<ArticlePage>().FirstOrDefault(_ => _.ArticleSummary == articleSummary);
+				var match = i.Pages.OfType<ArticlePage>().FirstOrDefault(x => x.ArticleSummary == articleSummary);
+                if (match == null) continue;
 
-				if (match != null)
-				{
-					CurrentViewer = i;
-					i.CurrentPage = match;
+				CurrentViewer = i;
+				i.CurrentPage = match;
 
-					return match;
-				}
+				return match;
 			}
 
 			var viewer = CurrentViewer;
@@ -101,15 +131,13 @@ namespace Linearstar.Coah.Models
 		{
 			foreach (var i in Viewers)
 			{
-				var match = i.Pages.OfType<FeedPage>().FirstOrDefault(_ => _.FeedSummary == feedSummary);
+				var match = i.Pages.OfType<FeedPage>().FirstOrDefault(x => x.FeedSummary == feedSummary);
+                if (match == null) continue;
 
-				if (match != null)
-				{
-					CurrentViewer = i;
-					i.CurrentPage = match;
+				CurrentViewer = i;
+				i.CurrentPage = match;
 
-					return match;
-				}
+				return match;
 			}
 
 			var viewer = CurrentViewer;

@@ -48,14 +48,14 @@ namespace Linearstar.Coah
 		{
 			var words = new HashSet<string>(StringUtil.GetWords(title));
 
-			return Articles?.Select(_ => new
+			return Articles?.Select(x => new
 			{
-				Article = _,
-				Similarity = StringUtil.IntersectWords(_.Title, words),
+				Article = x,
+				Similarity = StringUtil.IntersectWords(x.Title, words),
 			})
-			.Where(_ => _.Similarity.Count > words.Count / 2)
-			.OrderByDescending(_ => _.Similarity.Count)
-			.Select(_ => _.Article)
+			.Where(x => x.Similarity.Count > words.Count / 2)
+			.OrderByDescending(x => x.Similarity.Count)
+			.Select(x => x.Article)
 			.ToArray();
 		}
 

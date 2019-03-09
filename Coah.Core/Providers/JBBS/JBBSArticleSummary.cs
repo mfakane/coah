@@ -38,7 +38,7 @@ namespace Linearstar.Coah.JBBS
 
 				if (lines != null)
 				{
-					rt.CachedCommentCount = lines.Count(_ => !string.IsNullOrEmpty(_));
+					rt.CachedCommentCount = lines.Count(x => !string.IsNullOrEmpty(x));
 					rt.CommentCount = Math.Max(rt.CommentCount, rt.CachedCommentCount ?? 0);
 
 					if (rt.CachedCommentCount > 0)

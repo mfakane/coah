@@ -14,7 +14,7 @@ namespace Linearstar.Coah.ViewModels
 		CompositeDisposable handler;
 		IReadOnlyList<ArticleSummaryViewModel> articles;
 		CancellationTokenSource cts;
-		Func<IEnumerable<ArticleSummaryViewModel>, IEnumerable<ArticleSummaryViewModel>> applySort = _ => _;
+		Func<IEnumerable<ArticleSummaryViewModel>, IEnumerable<ArticleSummaryViewModel>> applySort = x => x;
 
 		public ViewerViewModel Viewer => (ViewerViewModel)Parent;
 		IPage IPageViewModel.Model => Model;
@@ -45,7 +45,7 @@ namespace Linearstar.Coah.ViewModels
 
 		public void SortArticles<TKey>(Func<ArticleSummaryViewModel, TKey> selector, bool isDescending)
 		{
-			applySort = _ => (isDescending ? _?.OrderByDescending(selector) : _?.OrderBy(selector));
+			applySort = x => (isDescending ? x?.OrderByDescending(selector) : x?.OrderBy(selector));
 			Articles = applySort(Articles)?.ToArray();
 		}
 
@@ -54,7 +54,7 @@ namespace Linearstar.Coah.ViewModels
 			handler = new CompositeDisposable
 			(
 				Model.OnPropertyChanged(nameof(Model.Articles)).Subscribe(e =>
-					Articles = applySort(Model.Articles?.Select(_ => new ArticleSummaryViewModel(Model.Viewer, _)))?.ToArray()),
+					Articles = applySort(Model.Articles?.Select(x => new ArticleSummaryViewModel(Model.Viewer, x)))?.ToArray()),
 				Model.Filters.OnCollectionChanged().Subscribe(e =>
 				{
 					NotifyOfPropertyChange(nameof(HasFilter));
@@ -137,19 +137,19 @@ namespace Linearstar.Coah.ViewModels
 
 		public void ShowSelectedItems()
 		{
-			foreach (var i in Articles.Where(_ => _.IsSelected))
+			foreach (var i in Articles.Where(x => x.IsSelected))
 				i.Show();
 		}
 
 		public void OpenSelectedItemsInBrowser()
 		{
-			foreach (var i in Articles.Where(_ => _.IsSelected))
+			foreach (var i in Articles.Where(x => x.IsSelected))
 				i.OpenInBrowser();
 		}
 
 		public void DeleteSelectedItemsCache()
 		{
-			foreach (var i in Articles.Where(_ => _.IsSelected))
+			foreach (var i in Articles.Where(x => x.IsSelected))
 				i.DeleteCache();
 		}
 	}

@@ -127,7 +127,7 @@ namespace Linearstar.Coah.Views
 
 				currentViewModel.Client.Model.Viewers.Add(newModel);
 
-				var view = Application.Current.Windows.OfType<ViewerView>().First(_ => ((ViewerViewModel)_.DataContext).Model == newModel);
+				var view = Application.Current.Windows.OfType<ViewerView>().First(x => ((ViewerViewModel)x.DataContext).Model == newModel);
 
 				return new NewTabHost<Window>(view, view.TabablzControl);
 			}

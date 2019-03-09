@@ -118,11 +118,11 @@ namespace Linearstar.Coah.Views
 					Visibility = Visibility.Visible;
 
 					Observable.Interval(TimeSpan.FromMilliseconds(CloseTimerInterval))
-							  .TakeUntil(Observable.FromEvent<EventHandler, EventArgs>(_ => (sender2, e2) => _(e2), _ => Closed += _, _ => Closed -= _))
+							  .TakeUntil(Observable.FromEvent<EventHandler, EventArgs>(x => (sender2, e2) => x(e2), x => Closed += x, x => Closed -= x))
 							  .ObserveOnDispatcher()
 							  .Subscribe(t =>
 							  {
-								  if (App.Current.Windows.OfType<PreviewPopup>().Where(_ => _.FindOwner().Contains(this)).All(_ => !_.GetIsMouseHover()))
+								  if (App.Current.Windows.OfType<PreviewPopup>().Where(x => x.FindOwner().Contains(this)).All(x => !x.GetIsMouseHover()))
 									  Close();
 							  });
 				});

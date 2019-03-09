@@ -32,8 +32,8 @@ namespace Linearstar.Coah.Views
 			if (item != null)
 			{
 				var type = item.GetType();
-				var rt = Styles.Where(_ => dataTypes.ContainsKey(_) && dataTypes[_].IsAssignableFrom(type))
-							   .OrderByDescending(_ => GetLevel(dataTypes[_]))
+				var rt = Styles.Where(x => dataTypes.ContainsKey(x) && dataTypes[x].IsAssignableFrom(type))
+							   .OrderByDescending(x => GetLevel(dataTypes[x]))
 							   .FirstOrDefault();
 
 				if (rt != null)

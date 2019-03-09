@@ -63,9 +63,9 @@ namespace Linearstar.Coah.JBBS
 		{
 			var seg = uri.Segments.Last();
 
-			if (seg.Cast<char>().All(_ => char.IsDigit(_) || _ == 'l'))
+			if (seg.Cast<char>().All(x => char.IsDigit(x) || x == 'l'))
 				return new[] { new DisplayRange(int.Parse(seg.Replace("l", ""))) };
-			else if (seg.Cast<char>().All(_ => char.IsDigit(_) || _ == '-'))
+			else if (seg.Cast<char>().All(x => char.IsDigit(x) || x == '-'))
 			{
 				var sl = seg.Split('-');
 

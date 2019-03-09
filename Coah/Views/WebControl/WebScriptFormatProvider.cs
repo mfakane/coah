@@ -31,7 +31,7 @@ namespace Linearstar.Coah.Views
 				else if (arg is string)
 					return "\"" + ((string)arg).Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\r", "\\r").Replace("\n", "\\n") + "\"";
 				else if (arg is IEnumerable)
-					return "[" + string.Join(", ", ((IEnumerable)arg).Cast<object>().Select(_ => Format(null, _, null))) + "]";
+					return "[" + string.Join(", ", ((IEnumerable)arg).Cast<object>().Select(x => Format(null, x, null))) + "]";
 				else
 					return arg.ToString();
 			}

@@ -37,7 +37,7 @@ namespace Linearstar.Coah.Views
 			if (e.NewValue is INotifyCollectionChanged)
 				sender.commentsCollectionChangedHandler = ((INotifyCollectionChanged)e.NewValue).OnCollectionChanged().Where(cce => cce.Action == NotifyCollectionChangedAction.Add).Subscribe(cce =>
 				{
-					var items = cce.NewItems.Cast<IReadOnlyCollection<ArticleCommentViewModel>>().SelectMany(i => i).Select(_ => _.Comment).ToArray();
+					var items = cce.NewItems.Cast<IReadOnlyCollection<ArticleCommentViewModel>>().SelectMany(i => i).Select(x => x.Comment).ToArray();
 
 					sender.RenderComments(items);
 				});
@@ -104,11 +104,9 @@ namespace Linearstar.Coah.Views
 			BrowserSettings = new BrowserSettings
 			{
 				ApplicationCache = CefState.Disabled,
-				CaretBrowsing = CefState.Disabled,
 				Databases = CefState.Disabled,
 				Javascript = CefState.Enabled,
 				LocalStorage = CefState.Disabled,
-				OffScreenTransparentBackground = false,
 				Plugins = CefState.Disabled,
 				WebGl = CefState.Disabled,
 			};
@@ -126,7 +124,7 @@ namespace Linearstar.Coah.Views
 				}
 			});
 
-			RegisterJsObject(ScriptObjectName, new WebScriptObject(this));
+            JavascriptObjectRepository.Register(ScriptObjectName, new WebScriptObject(this));
 		}
 
 		void ArticleWebControl_IsBrowserInitializedChanged(object sender, DependencyPropertyChangedEventArgs e) =>
@@ -168,11 +166,11 @@ namespace Linearstar.Coah.Views
 
 				Dispatcher.Invoke(() =>
 				{
-					if (idx > 0 && idx <= Comments.Sum(_ => _.Count))
+					if (idx > 0 && idx <= Comments.Sum(x => x.Count))
 					{
 						var ctx = (ContextMenu)Resources[mode == "id" ? "ArticleCommentIdentifierContextMenu" : "ArticleCommentContextMenu"];
 
-						ctx.DataContext = Comments.AsParallel().SelectMany(i => i).First(_ => _.Comment.Index == idx);
+						ctx.DataContext = Comments.AsParallel().SelectMany(i => i).First(x => x.Comment.Index == idx);
 						ctx.IsOpen = true;
 					}
 				});
@@ -185,9 +183,9 @@ namespace Linearstar.Coah.Views
 					.AsParallel()
 					.AsOrdered()
 					.SelectMany(i => i)
-					.Select(_ => _.Comment)
-					.Where(_ => _.GetReferences().Contains(idx))
-					.Select(_ => new DisplayRange(_.Index))
+					.Select(x => x.Comment)
+					.Where(x => x.GetReferences().Contains(idx))
+					.Select(x => new DisplayRange(x.Index))
 					.ToArray());
 			}
 			else if (fragment.StartsWith("#id-"))
@@ -198,9 +196,9 @@ namespace Linearstar.Coah.Views
 					.AsParallel()
 					.AsOrdered()
 					.SelectMany(i => i)
-					.Select(_ => _.Comment)
-					.Where(_ => _.Sender.Identifier == id)
-					.Select(_ => new DisplayRange(_.Index))
+					.Select(x => x.Comment)
+					.Where(x => x.Sender.Identifier == id)
+					.Select(x => new DisplayRange(x.Index))
 					.ToArray());
 			}
 		}
@@ -208,16 +206,16 @@ namespace Linearstar.Coah.Views
 		void ShowPopupByFragment(string fragment)
 		{
 			if (fragment.StartsWith("#res-"))
-				ShowCommentsPopup(fragment.Substring(5).Split(',').Select(_ =>
+				ShowCommentsPopup(fragment.Substring(5).Split(',').Select(x =>
 				{
-					if (_.Contains("-"))
+					if (x.Contains("-"))
 					{
-						var sl = _.Split('-');
+						var sl = x.Split('-');
 
 						return new DisplayRange(int.Parse(sl[0]), int.Parse(sl[1]));
 					}
 					else
-						return new DisplayRange(int.Parse(_));
+						return new DisplayRange(int.Parse(x));
 				}).ToArray());
 		}
 
@@ -341,7 +339,7 @@ namespace Linearstar.Coah.Views
 							DisplayRanges = new[] { new DisplayRange(idx, range.End) };
 						else if (range.End.HasValue && idx > range.End)
 							DisplayRanges = new[] { new DisplayRange(range.Begin, idx) };
-						else if (range.Latest.HasValue && idx < Comments.Sum(_ => _.Count) - range.Latest)
+						else if (range.Latest.HasValue && idx < Comments.Sum(x => x.Count) - range.Latest)
 							DisplayRanges = new[] { new DisplayRange(idx, null) };
 					}
 
@@ -351,7 +349,7 @@ namespace Linearstar.Coah.Views
 
 		void RenderComments(IList<ArticleComment> comments)
 		{
-			ExecuteScriptAsync($"{ScriptObjectIdentifier}.renderComments({SkinResource.CommentMarkerId}, {comments.AsParallel().AsOrdered().Select(_ => SkinResource.CommentHelper(_).ToString())});");
+			ExecuteScriptAsync($"{ScriptObjectIdentifier}.renderComments({SkinResource.CommentMarkerId}, {comments.AsParallel().AsOrdered().Select(x => SkinResource.CommentHelper(x).ToString())});");
 			UpdateSenderIdentifierCounter(comments);
 			UpdateReferenceCounter(comments);
 		}
@@ -361,16 +359,16 @@ namespace Linearstar.Coah.Views
 
 		void UpdateSenderIdentifierCounter(IEnumerable<ArticleComment> comments)
 		{
-			var countById = Dispatcher.Invoke(() => Comments).AsParallel().SelectMany(i => i).Select(_ => _.Comment).ToLookup(_ => _.Sender.Identifier);
+			var countById = Dispatcher.Invoke(() => Comments).AsParallel().SelectMany(i => i).Select(x => x.Comment).ToLookup(x => x.Sender.Identifier);
 
-			foreach (var i in comments.GroupBy(_ => _.Sender.Identifier))
-				ExecuteScriptAsync($"{ScriptObjectIdentifier}.updateSenderIdentifierCounter({i.Key}, {countById[i.Key].Select(_ => _.Index)});");
+			foreach (var i in comments.GroupBy(x => x.Sender.Identifier))
+				ExecuteScriptAsync($"{ScriptObjectIdentifier}.updateSenderIdentifierCounter({i.Key}, {countById[i.Key].Select(x => x.Index)});");
 		}
 
 		void UpdateReferenceCounter(IEnumerable<ArticleComment> comments)
 		{
-			var indices = new HashSet<int>(comments.Select(_ => _.Index));
-			var referenceByIndex = Dispatcher.Invoke(() => Comments).AsParallel().SelectMany(i => i).SelectMany(_ => _.Comment.GetReferences().Select(idx => Tuple.Create(_.Comment.Index, idx))).Where(_ => indices.Contains(_.Item2)).ToLookup(_ => _.Item2, _ => _.Item1);
+			var indices = new HashSet<int>(comments.Select(x => x.Index));
+			var referenceByIndex = Dispatcher.Invoke(() => Comments).AsParallel().SelectMany(i => i).SelectMany(x => x.Comment.GetReferences().Select(idx => Tuple.Create(x.Comment.Index, idx))).Where(x => indices.Contains(x.Item2)).ToLookup(x => x.Item2, x => x.Item1);
 
 			foreach (var i in indices)
 				ExecuteScriptAsync($"{ScriptObjectIdentifier}.updateReferenceCounter({i}, {referenceByIndex[i]});");

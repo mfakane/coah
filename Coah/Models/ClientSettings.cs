@@ -14,8 +14,8 @@ namespace Linearstar.Coah
 		string SettingsPath { get; } = Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, ".dat");
 
 		public string StartupPath { get; } = AppDomain.CurrentDomain.BaseDirectory;
-		public IEnumerable<Skin> Skins => Directory.EnumerateDirectories(Path.Combine(StartupPath, "Resources", "Skins")).Select(_ => new Skin(_));
-		public Skin CurrentSkin => Skins.First(_ => _.Name == "Default");
+		public IEnumerable<Skin> Skins => Directory.EnumerateDirectories(Path.Combine(StartupPath, "Resources", "Skins")).Select(x => new Skin(x));
+		public Skin CurrentSkin => Skins.First(x => x.Name == "Default");
 
 		public bool UseSystemReadProxy { get; } = false;
 		public bool UseSystemWriteProxy { get; } = false;

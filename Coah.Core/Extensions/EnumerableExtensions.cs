@@ -7,35 +7,35 @@ namespace Linearstar.Coah
 	static class EnumerableExtensions
 	{
 		public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource> onNext) =>
-			source.Select(_ =>
+			source.Select(x =>
 			{
-				onNext(_);
+				onNext(x);
 
-				return _;
+				return x;
 			});
 
 		public static IEnumerable<TSource> Do<TSource>(this IEnumerable<TSource> source, Action<TSource, int> onNext) =>
-			source.Select((_, idx) =>
+			source.Select((x, idx) =>
 			{
-				onNext(_, idx);
+				onNext(x, idx);
 
-				return _;
+				return x;
 			});
 
 		public static ParallelQuery<TSource> Do<TSource>(this ParallelQuery<TSource> source, Action<TSource> onNext) =>
-			source.Select(_ =>
+			source.Select(x =>
 			{
-				onNext(_);
+				onNext(x);
 
-				return _;
+				return x;
 			});
 
 		public static ParallelQuery<TSource> Do<TSource>(this ParallelQuery<TSource> source, Action<TSource, int> onNext) =>
-			source.Select((_, idx) =>
+			source.Select((x, idx) =>
 			{
-				onNext(_, idx);
+				onNext(x, idx);
 
-				return _;
+				return x;
 			});
 	}
 }

@@ -28,8 +28,10 @@ namespace Linearstar.Coah.Megalith
 			: base(provider, uri) =>
 			ParsedUri = new MegalithLocationUri(uri);
 
-		public static async Task<MegalithLocation> LoadFile(MegalithFeedProvider provider, Uri uri, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
+		public static async Task<MegalithLocation> LoadFile(MegalithFeedProvider provider, Uri uri, CancellationToken cancellationToken, IProgress<ProgressInfo> _)
 		{
+            cancellationToken.ThrowIfCancellationRequested();
+
 			var rt = new MegalithLocation(provider, uri);
 			var settings = await provider.LocalStorage.ReadAllText(rt.ParsedUri.SettingsPath, MegalithFeedProvider.Encoding);
 
@@ -40,7 +42,7 @@ namespace Linearstar.Coah.Megalith
 
 			if (items != null)
 				rt.Items = await Enumerable.Range(0, items.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).Length)
-					.Select(_ => rt.GetFeedSummaryInstance(new Uri(rt.ParsedUri.AbsoluteUri + "?log=" + (_ + 1)))).WhenAll();
+					.Select(x => rt.GetFeedSummaryInstance(new Uri(rt.ParsedUri.AbsoluteUri + "?log=" + (x + 1)))).WhenAll();
 
 			return rt;
 		}
@@ -72,7 +74,7 @@ namespace Linearstar.Coah.Megalith
 						var lines = MegalithFeedProvider.GetString(await res.Content.ReadAsByteArrayAsync()).Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
 
 						await FeedProvider.LocalStorage.WriteAllLines(ParsedUri.SubjectsPath, lines, MegalithFeedProvider.Encoding);
-						Items = await Enumerable.Range(0, lines.Length).Select(_ => GetFeedSummaryInstance(new MegalithFeedUri(this, _ + 1))).WhenAll();
+						Items = await Enumerable.Range(0, lines.Length).Select(x => GetFeedSummaryInstance(new MegalithFeedUri(this, x + 1))).WhenAll();
 					}
 					else
 						res.EnsureSuccessStatusCode();

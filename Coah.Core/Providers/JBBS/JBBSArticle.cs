@@ -19,7 +19,9 @@ namespace Linearstar.Coah.JBBS
 
 		public static async Task<JBBSArticle> LoadFile(JBBSArticleSummary summary, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
 		{
-			var rt = new JBBSArticle(summary);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var rt = new JBBSArticle(summary);
 			var data = await summary.FeedProvider.LocalStorage.ReadAllText(summary.ParsedUri.DataPath, JBBSFeedProvider.Encoding).ConfigureAwait(false);
 
 			if (data != null)
@@ -53,7 +55,7 @@ namespace Linearstar.Coah.JBBS
 										Parse(content.Substring(dlIdx, content.LastIndexOf("</dl>", StringComparison.Ordinal) - dlIdx), progress, JBBSArticleComment.ParseHtml);
 										((JBBSArticleComment)Comments[0]).Title = Regex.Match(content, "<title>(.+?)</title>").Groups[1].Value;
 
-										await FeedProvider.LocalStorage.WriteAllLines(ArticleSummary.ParsedUri.DataPath, Comments.Select(_ => _.ToString()), JBBSFeedProvider.Encoding);
+										await FeedProvider.LocalStorage.WriteAllLines(ArticleSummary.ParsedUri.DataPath, Comments.Select(x => x.ToString()), JBBSFeedProvider.Encoding);
 										ArticleSummary.LastModified = res2.Content.Headers.LastModified;
 									}
 
@@ -97,8 +99,8 @@ namespace Linearstar.Coah.JBBS
 			var lines = content.Split(new[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
 			var items = lines.AsParallel()
 							 .AsOrdered()
-							 .Select(_ => (commentParser ?? JBBSArticleComment.Parse)(ArticleSummary.ParsedUri.AbsoluteUri, _))
-							 .Do(_ => progress?.Report(ProgressInfo.Download(Summary, count++, lines.Length)));
+							 .Select(x => (commentParser ?? JBBSArticleComment.Parse)(ArticleSummary.ParsedUri.AbsoluteUri, x))
+							 .Do(x => progress?.Report(ProgressInfo.Download(Summary, count++, lines.Length)));
 
 			if (Comments == null)
 				Comments = items.ToList();

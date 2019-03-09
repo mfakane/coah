@@ -84,7 +84,7 @@ namespace Linearstar.Coah
 		}
 
 		public Task<IReadOnlyList<IDirectory>> GetDirectories(string searchPattern) =>
-			Task.FromResult<IReadOnlyList<IDirectory>>(Directory.EnumerateDirectories(FullName, searchPattern ?? "*").Select(_ => new FileSystemDirectory(_)).ToArray());
+			Task.FromResult<IReadOnlyList<IDirectory>>(Directory.EnumerateDirectories(FullName, searchPattern ?? "*").Select(x => new FileSystemDirectory(x)).ToArray());
 
 		public Task<IFile> GetFile(string name)
 		{
@@ -94,6 +94,6 @@ namespace Linearstar.Coah
 		}
 
 		public Task<IReadOnlyList<IFile>> GetFiles(string searchPattern) =>
-			Task.FromResult<IReadOnlyList<IFile>>(Directory.EnumerateFiles(FullName, searchPattern ?? "*").Select(_ => new FileSystemFile(_)).ToArray());
+			Task.FromResult<IReadOnlyList<IFile>>(Directory.EnumerateFiles(FullName, searchPattern ?? "*").Select(x => new FileSystemFile(x)).ToArray());
 	}
 }

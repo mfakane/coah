@@ -48,5 +48,9 @@ namespace Linearstar.Coah
 			Client.Settings.Save();
 			Cef.Shutdown();
 		}
+
+        class CefSettings : AbstractCefSettings
+        {
+        }
 	}
 }

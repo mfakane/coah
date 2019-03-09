@@ -58,16 +58,16 @@ namespace Linearstar.Coah
 		}
 
 		public virtual HashSet<int> GetReferences() =>
-			references ?? (references = new HashSet<int>(AnchorPattern.Matches(Body).Cast<Match>().SelectMany(m => m.Groups["num"].Value.Split(',')).SelectMany(_ =>
+			references ?? (references = new HashSet<int>(AnchorPattern.Matches(Body).Cast<Match>().SelectMany(m => m.Groups["num"].Value.Split(',')).SelectMany(x =>
 			{
-				if (_.Contains("-"))
+				if (x.Contains("-"))
 				{
-					var sl = _.Split('-');
+					var sl = x.Split('-');
 
 					return Enumerable.Range(int.Parse(sl[0]), int.Parse(sl[1]) - int.Parse(sl[0]) + 1);
 				}
 				else
-					return new[] { int.Parse(_) };
+					return new[] { int.Parse(x) };
 			})));
 
 		public virtual string GetBodyHtml()

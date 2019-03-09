@@ -30,9 +30,11 @@ namespace Linearstar.Coah.Megalopolis
 			: base(provider, uri) =>
 			ParsedUri = new MegalopolisLocationUri(uri);
 
-		public static async Task<MegalopolisLocation> LoadFile(MegalopolisFeedProvider provider, Uri uri, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
+		public static async Task<MegalopolisLocation> LoadFile(MegalopolisFeedProvider provider, Uri uri, CancellationToken cancellationToken, IProgress<ProgressInfo> _)
 		{
-			var rt = new MegalopolisLocation(provider, uri);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var rt = new MegalopolisLocation(provider, uri);
 			var data = await provider.LocalStorage.GetFile(rt.ParsedUri.ConfigurationPath);
 
 			if (data != null)
@@ -72,7 +74,7 @@ namespace Linearstar.Coah.Megalopolis
 						{
 							var subj = (SubjectResponse)new DataContractJsonSerializer(typeof(SubjectResponse)).ReadObject(ns);
 
-							Items = await Enumerable.Range(0, subj.SubjectCount).Select(_ => GetFeedSummaryInstance(new MegalopolisFeedUri(this, _ + 1))).WhenAll();
+							Items = await Enumerable.Range(0, subj.SubjectCount).Select(x => GetFeedSummaryInstance(new MegalopolisFeedUri(this, x + 1))).WhenAll();
 						}
 					else
 						res.EnsureSuccessStatusCode();

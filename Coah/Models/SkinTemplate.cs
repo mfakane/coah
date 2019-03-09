@@ -18,7 +18,7 @@ namespace Linearstar.Coah
 
 		public IEncodedString Comments(Func<TArticleComment, TemplateWriter> commentHelper)
 		{
-			Model.CommentHelper = _ => commentHelper((TArticleComment)_);
+			Model.CommentHelper = x => commentHelper((TArticleComment)x);
 
 			return new RawString(Model.CommentMarker);
 		}

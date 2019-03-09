@@ -22,7 +22,7 @@ namespace Linearstar.Coah
 		{
 			if (!instances.TryGetValue(key, out var value))
 			{
-				target = default(TValue);
+				target = default;
 
 				return false;
 			}
@@ -30,7 +30,7 @@ namespace Linearstar.Coah
 			if (value.TryGetTarget(out target))
 				return true;
 
-			instances.TryRemove(key, out value);
+			instances.TryRemove(key, out _);
 
 			return false;
 		}

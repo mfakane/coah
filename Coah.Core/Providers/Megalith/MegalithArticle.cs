@@ -33,7 +33,9 @@ namespace Linearstar.Coah.Megalith
 
 		public static async Task<MegalithArticle> LoadFile(MegalithArticleSummary summary, CancellationToken cancellationToken, IProgress<ProgressInfo> progress)
 		{
-			var rt = new MegalithArticle(summary);
+            cancellationToken.ThrowIfCancellationRequested();
+
+            var rt = new MegalithArticle(summary);
 			var dat = await summary.FeedProvider.LocalStorage.ReadAllText(summary.ParsedUri.DataPath, MegalithFeedProvider.Encoding).ConfigureAwait(false);
 			var com = await summary.FeedProvider.LocalStorage.ReadAllLines(summary.ParsedUri.CommentDataPath, MegalithFeedProvider.Encoding);
 			var aft = await summary.FeedProvider.LocalStorage.ReadAllText(summary.ParsedUri.AfterwordDataPath, MegalithFeedProvider.Encoding);
@@ -68,7 +70,7 @@ namespace Linearstar.Coah.Megalith
 				}, cancellationToken).ConfigureAwait(false))
 					if (resDat.StatusCode == HttpStatusCode.NotModified)
 						dat = await FeedProvider.LocalStorage.GetFile(ArticleSummary.ParsedUri.DataPath)
-							.ContinueWith(_ => _.Result.ReadAllText(MegalithFeedProvider.Encoding)).Unwrap();
+							.ContinueWith(x => x.Result.ReadAllText(MegalithFeedProvider.Encoding)).Unwrap();
 					else if (resDat.StatusCode == HttpStatusCode.OK)
 					{
 						var data = await resDat.Content.ReadAsByteArrayAsync();
@@ -99,7 +101,7 @@ namespace Linearstar.Coah.Megalith
 						var data = await resCom.Content.ReadAsByteArrayAsync();
 
 						await FeedProvider.LocalStorage.WriteAllBytes(ArticleSummary.ParsedUri.CommentDataPath, data);
-						com = MegalithFeedProvider.GetString(data).TrimEnd('\r', '\n').Split('\n').Select(_ => _.TrimEnd('\r')).ToArray();
+						com = MegalithFeedProvider.GetString(data).TrimEnd('\r', '\n').Split('\n').Select(x => x.TrimEnd('\r')).ToArray();
 						ArticleSummary.CommentLastModified = resCom.Content.Headers.LastModified;
 					}
 
@@ -142,8 +144,8 @@ namespace Linearstar.Coah.Megalith
 				var count = 0;
 				var items = com.AsParallel()
 							   .AsOrdered()
-							   .Where(_ => !_.StartsWith("#EMPTY#<>"))
-							   .Select((_, idx) => MegalithArticleComment.Parse(ArticleSummary.ParsedUri.AbsoluteUri, idx + 1, _))
+							   .Where(x => !x.StartsWith("#EMPTY#<>"))
+							   .Select((x, idx) => MegalithArticleComment.Parse(ArticleSummary.ParsedUri.AbsoluteUri, idx + 1, x))
 							   .Do(_ => progress?.Report(ProgressInfo.Download(Summary, count++, com.Length)))
 							   .Cast<ArticleComment>();
 

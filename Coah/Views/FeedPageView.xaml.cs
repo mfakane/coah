@@ -43,7 +43,7 @@ namespace Linearstar.Coah.Views
 					mainView.MergeStatusBar(this, null);
 				}),
 				ViewModel.Model.OnPropertyChanged(nameof(ViewModel.Model.FilterPredicate)).ObserveOnDispatcher().Subscribe(e2 =>
-					ArticleList.Items.Filter = _ => ViewModel.Model.FilterPredicate?.Invoke(((ArticleSummaryViewModel)_).Model) ?? true)
+					ArticleList.Items.Filter = x => ViewModel.Model.FilterPredicate?.Invoke(((ArticleSummaryViewModel)x).Model) ?? true)
 			);
 		}
 
@@ -78,19 +78,19 @@ namespace Linearstar.Coah.Views
 		{
 			var header = (GridViewColumnHeader)e.OriginalSource;
 
-			foreach (var i in ((GridView)ArticleList.View).Columns.Select(_ => _.Header).OfType<GridViewColumnHeader>())
+			foreach (var i in ((GridView)ArticleList.View).Columns.Select(x => x.Header).OfType<GridViewColumnHeader>())
 				i.Tag = null;
 
 			if (header == TitleHeader)
-				ViewModel.SortArticles(_ => _.Model.Title, header == sortKey ? (isDescending = !isDescending) : (isDescending = false));
+				ViewModel.SortArticles(x => x.Model.Title, header == sortKey ? (isDescending = !isDescending) : (isDescending = false));
 			else if (header == AuthorHeader)
-				ViewModel.SortArticles(_ => _.Model.Author, header == sortKey ? (isDescending = !isDescending) : (isDescending = false));
+				ViewModel.SortArticles(x => x.Model.Author, header == sortKey ? (isDescending = !isDescending) : (isDescending = false));
 			else if (header == CommentCountHeader)
-				ViewModel.SortArticles(_ => _.Model.CommentCount, header == sortKey ? (isDescending = !isDescending) : (isDescending = true));
+				ViewModel.SortArticles(x => x.Model.CommentCount, header == sortKey ? (isDescending = !isDescending) : (isDescending = true));
 			else if (header == NewCommentCountHeader)
-				ViewModel.SortArticles(_ => _.Model.NewCommentCount, header == sortKey ? (isDescending = !isDescending) : (isDescending = true));
+				ViewModel.SortArticles(x => x.Model.NewCommentCount, header == sortKey ? (isDescending = !isDescending) : (isDescending = true));
 			else if (header == DateTimeHeader)
-				ViewModel.SortArticles(_ => _.Model.DateTime, header == sortKey ? (isDescending = !isDescending) : (isDescending = true));
+				ViewModel.SortArticles(x => x.Model.DateTime, header == sortKey ? (isDescending = !isDescending) : (isDescending = true));
 
 			header.Tag = isDescending ? "Descending" : "Ascending";
 

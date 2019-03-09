@@ -8,12 +8,10 @@ namespace Linearstar.Coah.Views
 	{
 		static readonly PropertyChangedCallback UpdateProperty = (sender, e) =>
 		{
-			var w = sender as Window;
+            if (!(sender is Window w))
+                return;
 
-			if (w == null)
-				return;
-
-			w.SourceInitialized -= SourceInitialized;
+            w.SourceInitialized -= SourceInitialized;
 			w.SourceInitialized += SourceInitialized;
 		};
 		public static readonly DependencyProperty ShowIconProperty = DependencyProperty.RegisterAttached("ShowIcon", typeof(bool?), typeof(WindowOptions), new UIPropertyMetadata(null, UpdateProperty));

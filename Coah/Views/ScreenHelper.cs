@@ -39,7 +39,7 @@ namespace Linearstar.Coah.Views
 			this.screen = screen;
 
 		public static IList<ScreenHelper> GetScreens() =>
-			Screen.AllScreens.Select(_ => new ScreenHelper(_)).ToArray();
+			Screen.AllScreens.Select(x => new ScreenHelper(x)).ToArray();
 
 		public static ScreenHelper GetPrimaryScreen() =>
 			new ScreenHelper(Screen.PrimaryScreen);

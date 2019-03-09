@@ -61,7 +61,7 @@ namespace Linearstar.Coah
 			var filteredArticles = Filters.Aggregate(Articles, (x, y) => y.Filter(this, x));
 			var q = SearchString;
 
-			FilterPredicate = _ => (filteredArticles?.Contains(_) ?? true) && (q == null || _.Title.IndexOf(q, StringComparison.OrdinalIgnoreCase) > -1);
+			FilterPredicate = x => (filteredArticles?.Contains(x) ?? true) && (q == null || x.Title.IndexOf(q, StringComparison.OrdinalIgnoreCase) > -1);
 		}
 
 		public void GetSimilarArticles(string title)

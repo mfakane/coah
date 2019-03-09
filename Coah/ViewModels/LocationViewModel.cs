@@ -42,9 +42,9 @@ namespace Linearstar.Coah.ViewModels
 					Location is Location && ((Location)Location).IsSingleFeedLocation)
 					Items = null;
 				else if (Location is Location)
-					Items = Location.Items?.Select(_ => new LocationViewModel(_)).Reverse().ToArray();
+					Items = Location.Items?.Select(x => new LocationViewModel(x)).Reverse().ToArray();
 				else
-					Items = Location.Items?.Select(_ => new LocationViewModel(_)).ToArray();
+					Items = Location.Items?.Select(x => new LocationViewModel(x)).ToArray();
 			});
 
 		[NotifyPropertyChangedInvocator]
